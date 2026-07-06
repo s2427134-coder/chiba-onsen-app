@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>千葉ほっこり温浴ナビ ｜ あなたにぴったりの湯処を</title>
+    <!-- Google Fonts (Rounded Mplus for Cute Japanese vibe) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ----------------------------------
+         * デザインシステム ＆ トークン
+         * ---------------------------------- */
+        :root {
+            --bg-base: #FDFBF7; /* 温かみのある生成り色 */
+            --color-primary: #88B04B; /* 若草色 */
+            --color-primary-dark: #6E9439;
+            --color-accent: #E78B3F; /* ぽかぽかミカン色 */
+            --color-accent-light: #FDF1E6;
+            --color-text-dark: #4A3E3D; /* 優しいコゲ茶 */
+            --color-text-light: #8A7B7A;
+            --color-white: #FFFFFF;
+            --font-main: 'M PLUS Rounded 1c', 'Kiwi Maru', sans-serif;
+            --shadow-soft: 0 8px 30px rgba(136, 176, 75, 0.08);
+            --shadow-card: 0 10px 25px rgba(74, 62, 61, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-base);
+            color: var(--color-text-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* アプリ全体のコンテナ (スマホ最適化しつつPCでも美しく) */
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: var(--bg-base);
+            box-shadow: 0 0 30px rgba(74, 62, 61, 0.05);
+        }
+
+        /* ----------------------------------
+         * 共通コンポーネント & ユーティリティ
+         * ---------------------------------- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            width: 100%;
+            outline: none;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover, .btn-primary:active {
+            background-color: var(--color-primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-accent {
+            background-color: var(--color-accent);
+            color: var(--color-white);
+        }
+
+        .btn-accent:hover, .btn-accent:active {
+            background-color: #D37429;
+            transform: translateY(-2px);
+        }
+
+        /* 湯気の揺らぎアニメーション */
+        @keyframes steam {
+            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-5px) scale(1.05) rotate(3deg); opacity: 0.6; }
+            100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.3; }
+        }
+
+        .steam-bg {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(231,139,63,0.15) 0%, rgba(253,251,247,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: steam 6s ease-in-out infinite;
+        }
+
+        /* ----------------------------------
+         * 画面管理
+         * ---------------------------------- */
+        .screen {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            min-height: 100vh;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ----------------------------------
+         * 1. スプラッシュ・トップ画面
+         * ---------------------------------- */
+        #screen-splash {
+            background: linear-gradient(180deg, rgba(253, 251, 247, 0.8) 0%, rgba(253, 251, 247, 0.95) 100%), 
+                        url('https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .splash-header {
+            margin-top: 40px;
+            z-index: 2;
+        }
+
+        .splash-logo {
+            font-size: 2.2rem;
+            color: var(--color-primary);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-shadow: 1px 1px 0px var(--color-white);
+        }
+
+        .splash-logo i {
+            color: var(--color-accent);
+            animation: steam 3s ease-in-out infinite;
+        }
+
+        .splash-tagline {
+            font-size: 1.1rem;
+            color: var(--color-text-dark);
+            font-weight: 500;
+            background-color: rgba(136, 176, 75, 0.1);
+            padding: 6px 18px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 24px;
+        }
+
+        .splash-hero {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .splash-character {
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-accent-light);
+            border-radius: 50% 45% 50% 40% / 40% 50% 40% 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-soft);
+            border: 4px solid var(--color-white);
+            animation: steam 8s ease-in-out infinite;
+        }
+
+        .splash-character i {
+            font-size: 4.5rem;
+            color: var(--color-accent);
+            margin-bottom: 12px;
+        }
+
+        .splash-character span {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--color-text-dark);
+        }
+
+        .splash-footer {
+            width: 100%;
+            margin-bottom: 20px;
+            z-index: 2;
+        }
+
+        .splash-caption {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            margin-top: 15px;
+        }
+
+        /* ----------------------------------
+         * 2. 診断質問画面（共通レイアウト）
+         * ---------------------------------- */
+        .diagnostic-header {
+            padding: 24px 20px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .progress-container {
+            flex: 1;
+            height: 10px;
+            background-color: #EFECE6;
+            border-radius: 10px;
+            margin-right: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--color-primary);
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .question-box {
+            padding: 10px 24px;
+            text-align: center;
+        }
+
+        .question-badge {
+            display: inline-block;
+            background-color: var(--color-accent-light);
+            color: var(--color-accent);
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .question-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--color-text-dark);
+            line-height: 1.4;
+        }
+
+        .question-desc {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            margin-top: 6px;
+        }
+
+        .options-container {
+            flex: 1;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            justify-content: center;
+        }
+
+        /* 選択肢ボタンの和モダンな装飾 */
+        .option-card {
+            background-color: var(--color-white);
+            border: 2px solid #EFECE6;
+            border-radius: 20px;
+            padding: 18px 20px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(74, 62, 61, 0.02);
+        }
+
+        .option-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .option-card.selected {
+            border-color: var(--color-primary);
+            background-color: #F6FAEF;
+            box-shadow: 0 6px 15px rgba(136, 176, 75, 0.12);
+        }
+
+        .option-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background-color: var(--bg-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--color-primary);
+            transition: all 0.2s ease;
+        }
+
+        .option-card.selected .option-icon {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .option-text-wrapper {
+            flex: 1;
+            text-align: left;
+        }
+
+        .option-title-text {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--color-text-dark);
+        }
+
+        .option-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #D1CAC3;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            background-color: var(--color-white);
+        }
+
+        .option-card.selected .option-checkbox {
+            border-color: var(--color-primary);
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .option-checkbox i {
+            font-size: 0.75rem;
+            display: none;
+        }
+
+        .option-card.selected .option-checkbox i {
+            display: block;
+        }
+
+        /* ラジオボタン用丸型 */
+        .option-radio {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #D1CAC3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            background-color: var(--color-white);
+        }
+
+        .option-card.selected .option-radio {
+            border-color: var(--color-primary);
+        }
+
+        .option-card.selected .option-radio::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: var(--color-primary);
+            border-radius: 50%;
+        }
+
+        .diagnostic-footer {
+            padding: 20px 24px 30px;
+            display: flex;
+            gap: 12px;
+        }
+
+        /* ----------------------------------
+         * 3. 診断結果画面 (最重要UX)
+         * ---------------------------------- */
+        #screen-result {
+            background-color: var(--bg-base);
+            padding-bottom: 90px; /* 下部固定ボタン用の余白 */
+            transition: background 0.8s ease;
+        }
+
+        /* 背景色のテーマパターン */
+        .theme-forest { background: linear-gradient(180deg, #F4F8F0 0%, #FDFBF7 400px) !important; } /* 新緑 of ひだまり */
+        .theme-steam { background: linear-gradient(180deg, #FAF2EB 0%, #FDFBF7 400px) !important; }  /* ぽかぽか湯気色 */
+        .theme-bath { background: linear-gradient(180deg, #EDF5F8 0%, #FDFBF7 400px) !important; }   /* さわやか湯上がり */
+
+        /* スタックカードエリア */
+        .stack-section {
+            padding: 20px 16px 10px;
+            position: relative;
+            height: 410px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .stack-card {
+            position: absolute;
+            width: 100%;
+            max-width: 390px;
+            background-color: var(--color-white);
+            border-radius: 24px;
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            border: 1px solid rgba(136, 176, 75, 0.1);
+        }
+
+        /* チラ見えスタック状態のスタイル */
+        .stack-card.rank-1 {
+            z-index: 5;
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .stack-card.rank-2 {
+            z-index: 4;
+            transform: scale(0.93) translateY(24px);
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .stack-card.rank-3 {
+            z-index: 3;
+            transform: scale(0.86) translateY(48px);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        /* 非アクティブなカード */
+        .stack-card.hidden {
+            transform: scale(0.7) translateY(100px);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* カード内画像 */
+        .card-image-wrapper {
+            width: 100%;
+            height: 190px;
+            position: relative;
+            background-color: #EFECE6;
+            overflow: hidden;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .stack-card:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--color-accent);
+            color: var(--color-white);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 2;
+        }
+
+        .card-badge.rank-badge-1 {
+            background-color: #D4AF37; /* 金 */
+        }
+        .card-badge.rank-badge-2 {
+            background-color: #C0C0C0; /* 銀 */
+        }
+        .card-badge.rank-badge-3 {
+            background-color: #C4722B; /* 銅 */
+        }
+
+        .card-car-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #1E6F5C;
+            color: var(--color-white);
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            display: none;
+            align-items: center;
+            gap: 4px;
+            z-index: 2;
+        }
+
+        /* カードテキストコンテンツ */
+        .card-content {
+            padding: 16px 18px;
+        }
+
+        .card-header-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--color-text-dark);
+            line-height: 1.35;
+        }
+
+        .card-score-box {
+            background-color: var(--color-accent-light);
+            padding: 4px 10px;
+            border-radius: 12px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .score-num {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-accent);
+        }
+
+        .score-unit {
+            font-size: 0.75rem;
+            color: var(--color-text-dark);
+        }
+
+        .card-address {
+            font-size: 0.8rem;
+            color: var(--color-text-light);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* スコアインジケーター */
+        .indicator-container {
+            background-color: var(--bg-base);
+            padding: 10px 12px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+        }
+
+        .indicator-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-text-light);
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .indicator-bar-bg {
+            width: 100%;
+            height: 8px;
+            background-color: #EFECE6;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .indicator-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* カードナビゲーション (切替矢印 & インジケーター) */
+        .navigation-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px 15px;
+            z-index: 10;
+        }
+
+        .nav-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid var(--color-primary);
+            background-color: var(--color-white);
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .dots-indicator {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #D1CAC3;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--color-primary);
+            width: 18px;
+            border-radius: 4px;
+        }
+
+        /* ----------------------------------
+         * レコメンド詳細情報 ＆ クチコミ ＆ スコア表示
+         * ---------------------------------- */
+        .detail-section {
+            padding: 0 20px 20px;
+        }
+
+        /* 親しみやすい口コミのふきだし */
+        .review-bubble {
+            position: relative;
+            background-color: var(--color-accent-light);
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(231,139,63,0.15);
+            box-shadow: 0 4px 12px rgba(231,139,63,0.05);
+        }
+
+        .review-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 30px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: var(--color-accent-light) transparent;
+            display: block;
+            width: 0;
+        }
+
+        .review-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .review-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+            line-height: 1.5;
+            color: var(--color-text-dark);
+        }
+
+        /* 各スコアのポイント一覧セクション */
+        .score-radar-section {
+            background-color: var(--color-white);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px solid #EFECE6;
+            box-shadow: 0 4px 15px rgba(74, 62, 61, 0.03);
+        }
+
+        .score-radar-header {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-text-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .score-radar-header span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .score-radar-header span i {
+            color: var(--color-accent);
+        }
+
+        .score-bonus-badge {
+            background-color: #E2F0D9;
+            color: #385723;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+            display: none;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .score-radar-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .score-radar-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radar-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            width: 80px;
+            color: var(--color-text-dark);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .radar-bar-bg {
+            flex: 1;
+            height: 10px;
+            background-color: #F3EFE9;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .radar-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* 項目ごとのバーの色分け */
+        .bar-sauna { background: linear-gradient(90deg, #F08080, #CD5C5C); }
+        .bar-scenery { background: linear-gradient(90deg, #87CEEB, #4682B4); }
+        .bar-meal { background: linear-gradient(90deg, #FBC02D, #F57F17); }
+        .bar-relax { background: linear-gradient(90deg, #A2D149, #76A035); }
+        .bar-hidden { background: linear-gradient(90deg, #D2B48C, #8B5A2B); }
+
+        .radar-val {
+            font-size: 0.8rem;
+            font-weight: 700;
+            width: 60px;
+            text-align: right;
+            color: var(--color-text-dark);
+        }
+
+        .detail-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--color-text-dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .detail-title i {
+            color: var(--color-primary);
+        }
+
+        /* 和モダンな丸角テーブル */
+        .detail-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #EFECE6;
+            background-color: var(--color-white);
+            margin-bottom: 20px;
+        }
+
+        .detail-table tr:not(:last-child) td {
+            border-bottom: 1px solid #EFECE6;
+        }
+
+        .detail-table td {
+            padding: 12px 14px;
+            font-size: 0.85rem;
+        }
+
+        .detail-table td.label-cell {
+            background-color: var(--bg-base);
+            font-weight: 700;
+            color: var(--color-text-dark);
+            width: 90px;
+            text-align: center;
+        }
+
+        .detail-table td.value-cell {
+            color: var(--color-text-dark);
+        }
+
+        /* ----------------------------------
+         * 固定アクションボタン（画面最下部）
+         * ---------------------------------- */
+        .fixed-action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background-color: rgba(253, 251, 247, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 12px 16px;
+            border-top: 1px solid #EFECE6;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            z-index: 100;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.04);
+        }
+
+        .action-btn {
+            flex: 1;
+            height: 48px;
+            border-radius: 24px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .action-btn i {
+            font-size: 1.15rem;
+            margin-bottom: 2px;
+        }
+
+        /* 各種ボタンスタイル */
+        .action-btn-web {
+            background-color: var(--color-accent);
+            color: var(--color-white);
+        }
+
+        .action-btn-web:hover { background-color: #D37429; }
+
+        .action-btn-map {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .action-btn-map:hover { background-color: var(--color-primary-dark); }
+
+        .action-btn-line {
+            background-color: #06C755;
+            color: var(--color-white);
+        }
+
+        .action-btn-line:hover { background-color: #05A848; }
+
+        /* リトライボタン */
+        .retry-section {
+            padding: 0 24px 24px;
+            text-align: center;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- 1. スプラッシュ・トップ画面 -->
+        <div id="screen-splash" class="screen active">
+            <div class="steam-bg" style="top: 10%; left: 10%;"></div>
+            <div class="steam-bg" style="bottom: 15%; right: 10%;"></div>
+
+            <div class="splash-header">
+                <div class="splash-logo">
+                    <i class="fa-solid fa-hot-tub-person"></i>
+                    <span>ちば温浴ナビ</span>
+                </div>
+                <div class="splash-tagline">温泉のこだわり、ぽかぽかマッチ</div>
+            </div>
+
+            <div class="splash-hero">
+                <div class="splash-character">
+                    <i class="fa-solid fa-mug-hot"></i>
+                    <span>湯あがり、ほっこり。</span>
+                </div>
+            </div>
+
+            <div class="splash-footer">
+                <p style="font-size: 0.95rem; font-weight: 700; color: var(--color-text-dark); margin-bottom: 20px;">
+                    20万語のクチコミ分析から、<br>
+                    あなたにピッタリな温泉をご紹介
+                </p>
+                <button class="btn btn-accent" id="btn-start">
+                    温泉を探しにいく <span style="margin-left: 8px;">♨️</span>
+                </button>
+                <p class="splash-caption">頭が働かないときでも、直感で選べます</p>
+            </div>
+        </div>
+
+        <!-- 2. 診断質問画面 -->
+        <div id="screen-quiz" class="screen">
+            <div class="diagnostic-header">
+                <button id="btn-back" style="background:none; border:none; font-size: 1.2rem; color: var(--color-text-light); cursor: pointer; padding: 5px;">
+                    <i class="fa-solid fa-chevron-left"></i> 戻る
+                </button>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="progress-text" id="progress-text">Q1 / 5</div>
+            </div>
+
+            <div class="question-box">
+                <span class="question-badge" id="question-badge">第1問</span>
+                <h2 class="question-title" id="question-title">質問を読み込み中...</h2>
+                <p class="question-desc" id="question-desc"></p>
+            </div>
+
+            <div class="options-container" id="options-container">
+                <!-- 動的に選択肢が生成されます -->
+            </div>
+
+            <div class="diagnostic-footer">
+                <button class="btn btn-primary" id="btn-next" style="display: none;">
+                    次へ進む <i class="fa-solid fa-chevron-right" style="margin-left: 6px;"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. 診断結果画面 -->
+        <div id="screen-result" class="screen">
+            
+            <!-- スタックカードエリア -->
+            <div class="stack-section" id="stack-container">
+                <!-- 動的にスタックカード(1位~3位)が生成されます -->
+            </div>
+
+            <!-- ナビゲーションコントロール -->
+            <div class="navigation-control">
+                <button class="nav-btn" id="btn-prev-card">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div class="dots-indicator" id="dots-container">
+                    <div class="dot active"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+                <button class="nav-btn" id="btn-next-card">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- 詳細情報 ＆ 口コミ ＆ スコア内訳 -->
+            <div class="detail-section">
+                
+                <!-- クチコミふきだし -->
+                <div class="review-bubble">
+                    <div class="review-label">
+                        <i class="fa-solid fa-comment-dots"></i>
+                        <span>温浴ファンの生の声（クチコミ）</span>
+                    </div>
+                    <div class="review-text" id="result-review">
+                        「お風呂上がりにゆっくり過ごせるおすすめの場所です！」
+                    </div>
+                </div>
+
+                <!-- 各スコアのポイント可視化セクション -->
+                <div class="score-radar-section">
+                    <div class="score-radar-header">
+                        <span><i class="fa-solid fa-chart-bar"></i> 口コミ分析に基づく特徴度スコア</span>
+                        <div class="score-bonus-badge" id="score-bonus-badge">
+                            <i class="fa-solid fa-cloud-showers-heavy"></i> 雨の日補正中(1.5倍)
+                        </div>
+                    </div>
+                    <div class="score-radar-list">
+                        <!-- サウナ -->
+                        <div class="score-radar-row">
+                            <span class="radar-label">♨️ サウナ</span>
+                            <div class="radar-bar-bg">
+                                <div class="radar-bar-fill bar-sauna" id="radar-fill-sauna"></div>
+                            </div>
+                            <span class="radar-val" id="radar-val-sauna">0点</span>
+                        </div>
+                        <!-- 絶景 -->
+                        <div class="score-radar-row">
+                            <span class="radar-label">🌅 絶景</span>
+                            <div class="radar-bar-bg">
+                                <div class="radar-bar-fill bar-scenery" id="radar-fill-scenery"></div>
+                            </div>
+                            <span class="radar-val" id="radar-val-scenery">0点</span>
+                        </div>
+                        <!-- 食事 -->
+                        <div class="score-radar-row">
+                            <span class="radar-label">🍱 お食事</span>
+                            <div class="radar-bar-bg">
+                                <div class="radar-bar-fill bar-meal" id="radar-fill-meal"></div>
+                            </div>
+                            <span class="radar-val" id="radar-val-meal">0点</span>
+                        </div>
+                        <!-- お籠もり -->
+                        <div class="score-radar-row">
+                            <span class="radar-label">🛋️ お籠もり</span>
+                            <div class="radar-bar-bg">
+                                <div class="radar-bar-fill bar-relax" id="radar-fill-relax"></div>
+                            </div>
+                            <span class="radar-val" id="radar-val-relax">0点</span>
+                        </div>
+                        <!-- 穴場 -->
+                        <div class="score-radar-row">
+                            <span class="radar-label">🤫 穴場度</span>
+                            <div class="radar-bar-bg">
+                                <div class="radar-bar-fill bar-hidden" id="radar-fill-hidden"></div>
+                            </div>
+                            <span class="radar-val" id="radar-val-hidden">0点</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 詳細 data テーブル -->
+                <div class="detail-title">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>お役立ち施設情報</span>
+                </div>
+                <table class="detail-table">
+                    <tr>
+                        <td class="label-cell">住所</td>
+                        <td class="value-cell" id="result-address">-</td>
+                    </tr>
+                    <tr>
+                        <td class="label-cell">駐車場</td>
+                        <td class="value-cell" id="result-parking" style="font-weight: 700; color: var(--color-accent);">
+                            -
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <!-- もう一度診断するボタン -->
+            <div class="retry-section">
+                <button class="btn btn-outline" id="btn-restart">
+                    <i class="fa-solid fa-rotate-right" style="margin-right: 6px;"></i> 別の気分で探す
+                </button>
+            </div>
+
+            <!-- 4. 固定アクションバー (最下部固定) -->
+            <div class="fixed-action-bar">
+                <a href="#" target="_blank" class="action-btn action-btn-web" id="action-web">
+                    <i class="fa-solid fa-globe"></i>
+                    <span>公式HP・料金</span>
+                </a>
+                <a href="#" target="_blank" class="action-btn action-btn-map" id="action-map">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>マップ・経路</span>
+                </a>
+                <a href="#" target="_blank" class="action-btn action-btn-line" id="action-line">
+                    <i class="fa-brands fa-line"></i>
+                    <span>LINEで送る</span>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ----------------------------------
+     * JavaScript ロジック実装
+     * ---------------------------------- -->
+    <script>
+        // --- 1. マスターデータベースの定義 ---
+        const ONSEN_DB = [
+            {
+                id: 1,
+                name: "JFA夢フィールド 幕張温泉 湯楽の里",
+                scores: {
+                    sauna: 79,
+                    scenery: 1255,  // 絶景
+                    meal: 1044,     // 食事
+                    relax: 894,     // お籠もり
+                    hidden: 322     // 穴場
+                },
+                tags: ["東京湾が一望できる温泉", "富士山が見える温泉"],
+                parking: "約200台（無料）",
+                url: "https://www.yurakirari.com/makuhari/",
+                imageUrl: "https://www.jfa.jp/img/cache/5f0294f0-1110-4837-80fd-567bd3093d95.jpg",
+                address: "〒261-0022 千葉県千葉市美浜区美浜２６",
+                reviews: [
+                    "東京湾が見渡せるオーシャンビューの露天風呂がとにかく最高。",
+                    "大海原と富士山、都内のビル群、東京湾を渡る橋まで見渡せて最高でした。"
+                ]
+            },
+            {
+                id: 2,
+                name: "スパメッツァおおたか 竜泉寺の湯",
+                scores: {
+                    sauna: 1085,
+                    scenery: 0,
+                    meal: 195,
+                    relax: 752,
+                    hidden: 476
+                },
+                tags: ["サウナで整いたい", "漫画がたくさん置いてある"],
+                parking: "約430台（全日100円）",
+                url: "https://www.ryusenjinoyu.com/spametsaotaka/",
+                imageUrl: "https://img.sauna-ikitai.com/sauna/23546_20220503_015803_maTW0CNesh_large.jpg",
+                address: "〒270-0128 千葉県流山市おおたかの森西１丁目１５−３",
+                reviews: [
+                    "ドラゴンサウナ浴びたらマジ決まる",
+                    "サウナ施設の充実ぶりがすごいです！驚しました。"
+                ]
+            },
+            {
+                id: 3,
+                name: "酒々井温泉 湯楽の里",
+                scores: {
+                    sauna: 93,
+                    scenery: 372,
+                    meal: 963,
+                    relax: 175,
+                    hidden: 952
+                },
+                tags: ["ご飯が美味しい施設", "富士山が見える温泉"],
+                parking: "約240台（無料）",
+                url: "https://www.yurakirari.com/shisui/",
+                imageUrl: "https://www.yurakirari.com/yura/shisui/shisui_img/index/main02.jpg",
+                address: "〒285-0912 千葉県印旛郡酒々井町飯塚１３６１",
+                reviews: [
+                    "ここの飯処はメニューが豊富で、どれを頼んでも本当に美味しい！",
+                    "のどかな田園風景を眺めながら入る露天風呂と美味しい和食で満たされます。"
+                ]
+            },
+            {
+                id: 4,
+                name: "天然温泉 湯〜ねる",
+                scores: {
+                    sauna: 155,
+                    scenery: 0,
+                    meal: 138,
+                    relax: 946,
+                    hidden: 973
+                },
+                tags: ["岩盤浴でまったり過ごしたい", "漫画がたくさん置いてある"],
+                parking: "約900台（7時間まで無料）",
+                url: "https://u-nel.jp/",
+                imageUrl: "https://pbs.twimg.com/media/HLozMpLacAABTFu.jpg",
+                address: "〒275-0024 千葉県習志野市茜浜２丁目１−１1",
+                reviews: [
+                    "漫画の量がとにかくエグい。一日中ダラダラお籠もりするには最高の環境。",
+                    "駅チカで岩盤浴もあって、夜遅くまでまったり楽しめました。"
+                ]
+            },
+            {
+                id: 5,
+                name: "のだ温泉ほのか",
+                scores: {
+                    sauna: 82,
+                    scenery: 0,
+                    meal: 3,
+                    relax: 627,
+                    hidden: 1029
+                },
+                tags: ["岩盤浴でまったり過ごしたい", "漫画がたくさん置いてある"],
+                parking: "約266台（無料）",
+                url: "https://yudokoro-honoka.jp/noda/",
+                imageUrl: "https://yudokoro-honoka.jp/noda/images/bath_img_01.jpg",
+                address: "〒278-0001 千葉県野田市目吹１５７３",
+                reviews: [
+                    "岩盤浴の種類が豊富で、混雑を気にせず静かに癒やされたい時にぴったり。",
+                    "とにかくのんびり、リラックスしてお籠もりするのに向いています。"
+                ]
+            }
+        ];
+
+        // --- 2. 特徴・タグと評価用カテゴリのマッピング ---
+        const FEATURE_CATEGORIES = {
+            "サウナで整いたい": "sauna",
+            "岩盤浴でまったり過ごしたい": "relax",
+            "東京湾が一望できる温泉": "scenery",
+            "富士山が見える温泉": "scenery",
+            "漫画がたくさん置いてある": "relax",
+            "落ち着いた雰囲気の隠れ家的温泉": "hidden",
+            "ご飯が美味しい施設": "meal"
+        };
+
+        const CATEGORY_JA = {
+            "sauna": "サウナ",
+            "scenery": "絶景",
+            "meal": "お食事",
+            "relax": "お籠もり",
+            "hidden": "穴場"
+        };
+
+        // 各カテゴリの初期スコアにおける最大値を算出（100%基準値として利用）
+        const CATEGORY_MAX_SCORES = {
+            sauna: Math.max(...ONSEN_DB.map(o => o.scores.sauna)),
+            scenery: Math.max(...ONSEN_DB.map(o => o.scores.scenery)),
+            meal: Math.max(...ONSEN_DB.map(o => o.scores.meal)),
+            relax: Math.max(...ONSEN_DB.map(o => o.scores.relax)),
+            hidden: Math.max(...ONSEN_DB.map(o => o.scores.hidden))
+        };
+
+        // --- 3. 診断ステート管理 ---
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        // ユーザー回答の一時保存
+        let answers = {
+            q1_weather: "",  // "晴れ", "曇り", "雨"
+            q2_transport: "", // "徒歩", "自転車", "車", "電車"
+            q3_moods: [],     // Q3選択配列
+            q4_styles: [],    // Q4選択配列
+            final_important: "" // 最重要項目
+        };
+
+        // レコメンド結果
+        let recommendedFacilities = []; 
+        let currentCardIndex = 0; 
+
+        // --- 4. 質問データの定義 ---
+        const quizSteps = {
+            1: {
+                badge: "第1問",
+                title: "いまの天気を教えてね",
+                desc: "お天気に合わせて、お籠もり度の心地よさを調整します。",
+                type: "single", 
+                options: [
+                    { value: "晴れ", label: "すっきり晴れ", icon: "fa-sun" },
+                    { value: "曇り", label: "おちついた曇り", icon: "fa-cloud" },
+                    { value: "雨", label: "しとしと雨", icon: "fa-cloud-showers-heavy" }
+                ]
+            },
+            2: {
+                badge: "第2問",
+                title: "交通手段はどうする？",
+                desc: "車でお越しの方には駐車場情報をお知らせします。",
+                type: "single",
+                options: [
+                    { value: "徒歩", label: "てくてく徒歩", icon: "fa-walking" },
+                    { value: "自転車", label: "かろやか自転車", icon: "fa-bicycle" },
+                    { value: "車", label: "のんびりお車", icon: "fa-car" },
+                    { value: "電車", label: "ごとごと電車", icon: "fa-subway" }
+                ]
+            },
+            3: {
+                badge: "第3問",
+                title: "今の気分を教えて（いくつでもいいよ）",
+                desc: "体が求めているリラックス方法を伺います。",
+                type: "multiple", 
+                options: [
+                    { value: "サウナで整いたい", label: "サウナで整いたい", icon: "fa-fire" },
+                    { value: "岩盤浴でまったり過ごしたい", label: "岩盤浴でまったり過ごす", icon: "fa-couch" },
+                    { value: "漫画がたくさん置いてある", label: "漫画を読んでゴロゴロしたい", icon: "fa-book-open" }
+                ]
+            },
+            4: {
+                badge: "第4問",
+                title: "どんな場所がお好み？（いくつでもいいよ）",
+                desc: "ロケーションや施設の特徴のご希望を伺います。",
+                type: "multiple",
+                options: [
+                    { value: "東京湾が一望できる温泉", label: "東京湾が一望できる露天", icon: "fa-water" },
+                    { value: "富士山が見える温泉", label: "富士山が見える絶景", icon: "fa-mountain" },
+                    { value: "落ち着いた雰囲気の隠れ家的温泉", label: "落ち着いた雰囲気の隠れ家的温泉", icon: "fa-map-pin" },
+                    { value: "ご飯が美味しい施設", label: "とにかくお食事が美味しい", icon: "fa-utensils" }
+                ]
+            },
+            5: {
+                badge: "最後の質問",
+                title: "この中でいちばん大事にしたいのは？",
+                desc: "これが今日の温泉選びの決定打になります！",
+                type: "final", 
+                options: [] 
+            }
+        };
+
+        // --- 5. DOM要素 ---
+        const screenSplash = document.getElementById("screen-splash");
+        const screenQuiz = document.getElementById("screen-quiz");
+        const screenResult = document.getElementById("screen-result");
+
+        const btnStart = document.getElementById("btn-start");
+        const btnBack = document.getElementById("btn-back");
+        const btnNext = document.getElementById("btn-next");
+        const btnRestart = document.getElementById("btn-restart");
+
+        const progressBar = document.getElementById("progress-bar");
+        const progressText = document.getElementById("progress-text");
+        const questionBadge = document.getElementById("question-badge");
+        const questionTitle = document.getElementById("question-title");
+        const questionDesc = document.getElementById("question-desc");
+        const optionsContainer = document.getElementById("options-container");
+
+        const stackContainer = document.getElementById("stack-container");
+        const dotsContainer = document.getElementById("dots-container");
+        const btnPrevCard = document.getElementById("btn-prev-card");
+        const btnNextCard = document.getElementById("btn-next-card");
+
+        const resultReview = document.getElementById("result-review");
+        const resultAddress = document.getElementById("result-address");
+        const resultParking = document.getElementById("result-parking");
+
+        const actionWeb = document.getElementById("action-web");
+        const actionMap = document.getElementById("action-map");
+        const actionLine = document.getElementById("action-line");
+
+        // --- 6. イベントリスナー設定 ---
+        btnStart.addEventListener("click", () => {
+            currentStep = 1;
+            answers = { q1_weather: "", q2_transport: "", q3_moods: [], q4_styles: [], final_important: "" };
+            changeScreen(screenSplash, screenQuiz);
+            renderQuizStep();
+        });
+
+        btnBack.addEventListener("click", () => {
+            if (currentStep > 1) {
+                currentStep--;
+                renderQuizStep();
+            } else {
+                changeScreen(screenQuiz, screenSplash);
+            }
+        });
+
+        btnNext.addEventListener("click", () => {
+            if (currentStep < totalSteps) {
+                // 各画面の回答チェック
+                if (currentStep === 3 && answers.q3_moods.length === 0) {
+                    showValidationAlert("気分を1つ以上選んでね");
+                    return;
+                }
+                if (currentStep === 4 && answers.q4_styles.length === 0) {
+                    showValidationAlert("好みの特徴を1つ以上選んでね");
+                    return;
+                }
+
+                currentStep++;
+                renderQuizStep();
+            } else {
+                // 最終決定
+                if (!answers.final_important) {
+                    showValidationAlert("一番大事にしたいこだわりを1つ選んでね");
+                    return;
+                }
+                calculateRecommendation();
+                changeScreen(screenQuiz, screenResult);
+            }
+        });
+
+        btnRestart.addEventListener("click", () => {
+            changeScreen(screenResult, screenSplash);
+        });
+
+        // 矢印キーでのカード切替
+        btnPrevCard.addEventListener("click", () => {
+            if (currentCardIndex > 0) {
+                changeCardIndex(currentCardIndex - 1);
+            }
+        });
+
+        btnNextCard.addEventListener("click", () => {
+            if (currentCardIndex < recommendedFacilities.length - 1) {
+                changeCardIndex(currentCardIndex + 1);
+            }
+        });
+
+        // --- 7. 各種ナビゲーション/UI関数 ---
+
+        // フェード付画面切り替え
+        function changeScreen(fromScreen, toScreen) {
+            fromScreen.classList.remove("active");
+            toScreen.classList.add("active");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // カスタム警告メッセージ
+        function showValidationAlert(message) {
+            const toast = document.createElement("div");
+            toast.style.position = "fixed";
+            toast.style.bottom = "100px";
+            toast.style.left = "50%";
+            toast.style.transform = "translateX(-50%)";
+            toast.style.backgroundColor = "var(--color-accent)";
+            toast.style.color = "var(--color-white)";
+            toast.style.padding = "12px 24px";
+            toast.style.borderRadius = "30px";
+            toast.style.fontWeight = "700";
+            toast.style.zIndex = "2000";
+            toast.style.boxShadow = "var(--shadow-card)";
+            toast.style.fontSize = "0.95rem";
+            toast.style.textAlign = "center";
+            toast.style.whiteSpace = "nowrap";
+            toast.innerText = message;
+            
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.transition = "opacity 0.5s ease";
+                toast.style.opacity = "0";
+                setTimeout(() => toast.remove(), 500);
+            }, 2000);
+        }
+
+        // 診断の描画
+        function renderQuizStep() {
+            // プログレスバー
+            const percent = ((currentStep - 1) / totalSteps) * 100;
+            progressBar.style.width = `${percent}%`;
+            progressText.innerText = `Q${currentStep} / ${totalSteps}`;
+
+            const stepData = quizSteps[currentStep];
+            questionBadge.innerText = stepData.badge;
+            questionTitle.innerText = stepData.title;
+            questionDesc.innerText = stepData.desc;
+
+            optionsContainer.innerHTML = "";
+
+            // Q5(最終ステップ)の場合は、Q3・Q4で選ばれたものを選択肢として動的生成する
+            if (currentStep === 5) {
+                const combinedTags = [...answers.q3_moods, ...answers.q4_styles];
+                stepData.options = combinedTags.map(tag => {
+                    let icon = "fa-circle-check";
+                    if (tag.includes("サウナ")) icon = "fa-fire";
+                    if (tag.includes("ご飯") || tag.includes("食事")) icon = "fa-utensils";
+                    if (tag.includes("岩盤浴")) icon = "fa-couch";
+                    if (tag.includes("東京湾")) icon = "fa-water";
+                    if (tag.includes("富士山")) icon = "fa-mountain";
+                    if (tag.includes("漫画")) icon = "fa-book-open";
+                    if (tag.includes("隠れ家")) icon = "fa-map-pin";
+
+                    // 表示用カスタム文言
+                    let label = tag;
+                    if (tag === "漫画がたくさん置いてある") {
+                        label = "漫画を読んでゴロゴロしたい";
+                    }
+
+                    return { value: tag, label: label, icon: icon };
+                });
+
+                if (stepData.options.length === 0) {
+                    stepData.options = [
+                        { value: "サウナで整いたい", label: "サウナで整いたい", icon: "fa-fire" },
+                        { value: "漫画がたくさん置いてある", label: "漫画を読んでゴロゴロしたい", icon: "fa-book" }
+                    ];
+                }
+            }
+
+            // 選択肢を描画
+            stepData.options.forEach(opt => {
+                const card = document.createElement("div");
+                card.className = "option-card";
+                
+                const iconDiv = document.createElement("div");
+                iconDiv.className = "option-icon";
+                iconDiv.innerHTML = `<i class="fa-solid ${opt.icon}"></i>`;
+                card.appendChild(iconDiv);
+
+                const textWrapper = document.createElement("div");
+                textWrapper.className = "option-text-wrapper";
+                const titleText = document.createElement("div");
+                titleText.className = "option-title-text";
+                titleText.innerText = opt.label;
+                textWrapper.appendChild(titleText);
+                card.appendChild(textWrapper);
+
+                const checkElement = document.createElement("div");
+                if (stepData.type === "multiple") {
+                    checkElement.className = "option-checkbox";
+                    checkElement.innerHTML = `<i class="fa-solid fa-check"></i>`;
+                } else {
+                    checkElement.className = "option-radio";
+                }
+                card.appendChild(checkElement);
+
+                // 初期選択状態の復元
+                if (currentStep === 1 && answers.q1_weather === opt.value) card.classList.add("selected");
+                if (currentStep === 2 && answers.q2_transport === opt.value) card.classList.add("selected");
+                if (currentStep === 3 && answers.q3_moods.includes(opt.value)) card.classList.add("selected");
+                if (currentStep === 4 && answers.q4_styles.includes(opt.value)) card.classList.add("selected");
+                if (currentStep === 5 && answers.final_important === opt.value) card.classList.add("selected");
+
+                card.addEventListener("click", () => {
+                    handleOptionClick(opt.value, card, stepData.type);
+                });
+
+                optionsContainer.appendChild(card);
+            });
+
+            if (stepData.type === "multiple" || stepData.type === "final") {
+                btnNext.style.display = "flex";
+                btnNext.innerText = currentStep === 5 ? "のんびり結果をみる ➔" : "次へ進む ➔";
+            } else {
+                btnNext.style.display = "none";
+            }
+        }
+
+        // オプション選択時のデータ保持
+        function handleOptionClick(val, cardElement, type) {
+            if (type === "single") {
+                if (currentStep === 1) {
+                    answers.q1_weather = val;
+                } else if (currentStep === 2) {
+                    answers.q2_transport = val;
+                }
+                
+                document.querySelectorAll(".option-card").forEach(el => el.classList.remove("selected"));
+                cardElement.classList.add("selected");
+
+                setTimeout(() => {
+                    currentStep++;
+                    renderQuizStep();
+                }, 300);
+
+            } else if (type === "multiple") {
+                let targetArray = currentStep === 3 ? answers.q3_moods : answers.q4_styles;
+                const index = targetArray.indexOf(val);
+                if (index > -1) {
+                    targetArray.splice(index, 1);
+                    cardElement.classList.remove("selected");
+                } else {
+                    targetArray.push(val);
+                    cardElement.classList.add("selected");
+                }
+            } else if (type === "final") {
+                answers.final_important = val;
+                document.querySelectorAll(".option-card").forEach(el => el.classList.remove("selected"));
+                cardElement.classList.add("selected");
+            }
+        }
+
+        // --- 8. レコメンド診断ロジックの実行 ---
+        function calculateRecommendation() {
+            const chosenTag = answers.final_important;
+            const targetCategory = FEATURE_CATEGORIES[chosenTag] || "relax"; 
+
+            let calcList = ONSEN_DB.map(onsen => {
+                let baseScore = onsen.scores[targetCategory] || 0;
+
+                // 雨天時のブースト補正
+                if (answers.q1_weather === "雨" && (targetCategory === "relax" || targetCategory === "sauna")) {
+                    baseScore = Math.round(baseScore * 1.5);
+                }
+
+                return {
+                    ...onsen,
+                    finalCalcScore: baseScore,
+                    matchedCategory: targetCategory
+                };
+            });
+
+            // 【最重要】絶景の完全除外ロジック
+            if (chosenTag === "東京湾が一望できる温泉" || chosenTag === "富士山が見える温泉") {
+                calcList = calcList.filter(onsen => onsen.scores.scenery > 0);
+            }
+
+            calcList.sort((a, b) => b.finalCalcScore - a.finalCalcScore);
+            recommendedFacilities = calcList.slice(0, 3);
+
+            currentCardIndex = 0;
+            renderStackCards();
+            updateResultDetails(0);
+        }
+
+        // --- 9. 結果画面のスタックカード描画 ＆ スライド制御 ---
+        function renderStackCards() {
+            stackContainer.innerHTML = "";
+            const chosenTag = answers.final_important;
+            const targetCategory = FEATURE_CATEGORIES[chosenTag] || "relax";
+            const categoryJaName = CATEGORY_JA[targetCategory] || "おすすめ";
+
+            // 各カテゴリの初期最高点を適合率100%の分母基準値とする
+            const maxScore = CATEGORY_MAX_SCORES[targetCategory] || 1000;
+
+            recommendedFacilities.forEach((facility, idx) => {
+                let rankClass = "hidden";
+                if (idx === 0) rankClass = "rank-1";
+                else if (idx === 1) rankClass = "rank-2";
+                else if (idx === 2) rankClass = "rank-3";
+
+                const card = document.createElement("div");
+                card.className = `stack-card ${rankClass}`;
+                card.id = `card-rank-${idx}`;
+
+                const carBadgeStyle = (answers.q2_transport === "車") ? "display: flex;" : "display: none;";
+
+                // 各カテゴリスコアの最高点を100点満点として適合率を算出
+                const matchRate = Math.min(100, Math.round((facility.finalCalcScore / maxScore) * 100));
+
+                card.innerHTML = `
+                    <div class="card-image-wrapper">
+                        <span class="card-badge rank-badge-${idx+1}">
+                            <i class="fa-solid fa-crown"></i> 第${idx+1}位
+                        </span>
+                        <span class="card-car-badge" style="${carBadgeStyle}">
+                            <i class="fa-solid fa-car"></i> お車で快適！
+                        </span>
+                        <img class="card-image" src="${facility.imageUrl}" alt="${facility.name}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80';">
+                    </div>
+                    <div class="card-content">
+                        <div class="card-header-row">
+                            <h3 class="card-title">${facility.name}</h3>
+                            <div class="card-score-box">
+                                <span class="score-num">${facility.finalCalcScore}</span>
+                                <span class="score-unit">点</span>
+                            </div>
+                        </div>
+                        <div class="card-address">
+                            <i class="fa-solid fa-location-dot"></i> ${facility.address}
+                        </div>
+                        <div class="indicator-container">
+                            <div class="indicator-label">
+                                <span>こだわり度（${categoryJaName}）</span>
+                                <span>適合率 ${matchRate}%</span>
+                            </div>
+                            <div class="indicator-bar-bg">
+                                <div class="indicator-bar-fill" id="bar-fill-${idx}"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                stackContainer.appendChild(card);
+                
+                setTimeout(() => {
+                    const fillBar = document.getElementById(`bar-fill-${idx}`);
+                    if (fillBar) {
+                        const pct = Math.min(100, Math.round((facility.finalCalcScore / maxScore) * 100));
+                        fillBar.style.width = `${Math.max(15, pct)}%`; 
+                    }
+                }, 100);
+            });
+        }
+
+        // 表示するカードの切り替え
+        function changeCardIndex(newIndex) {
+            currentCardIndex = newIndex;
+
+            for (let idx = 0; idx < recommendedFacilities.length; idx++) {
+                const card = document.getElementById("card-rank-" + idx);
+                if (!card) continue;
+
+                card.className = "stack-card"; 
+
+                if (idx === currentCardIndex) {
+                    card.classList.add("rank-1");
+                } else if (idx === currentCardIndex + 1) {
+                    card.classList.add("rank-2");
+                } else if (idx === currentCardIndex + 2) {
+                    card.classList.add("rank-3");
+                } else {
+                    card.classList.add("hidden");
+                }
+            }
+
+            const dots = dotsContainer.querySelectorAll(".dot");
+            dots.forEach((dot, idx) => {
+                if (idx === currentCardIndex) {
+                    dot.classList.add("active");
+                } else {
+                    dot.classList.remove("active");
+                }
+                
+                // 候補が3件未満の場合に非表示にする
+                if (idx >= recommendedFacilities.length) {
+                    dot.style.display = "none";
+                } else {
+                    dot.style.display = "block";
+                }
+            });
+
+            updateResultDetails(currentCardIndex);
+        }
+
+        // カードインデックスに応じたテーマ色と詳細データの更新
+        function updateResultDetails(index) {
+            const facility = recommendedFacilities[index];
+            if (!facility) return;
+
+            // 1. クチコミ (配列からランダムで1件選択)
+            const randomReview = facility.reviews[Math.floor(Math.random() * facility.reviews.length)];
+            resultReview.innerHTML = `「${randomReview}」`;
+
+            // 2. 各スコアのポイント可視化 & 雨の日ブースト計算
+            const chosenTag = answers.final_important;
+            const targetCategory = FEATURE_CATEGORIES[chosenTag] || "relax";
+            const isRainyBonusActive = (answers.q1_weather === "雨" && (targetCategory === "relax" || targetCategory === "sauna"));
+
+            // 雨の日バッジ表示
+            const bonusBadge = document.getElementById("score-bonus-badge");
+            if (isRainyBonusActive) {
+                bonusBadge.style.display = "inline-flex";
+            } else {
+                bonusBadge.style.display = "none";
+            }
+
+            // 各種スコアの取得と雨の日補正の適用
+            let saunaScore = facility.scores.sauna;
+            let sceneryScore = facility.scores.scenery;
+            let mealScore = facility.scores.meal;
+            let relaxScore = facility.scores.relax;
+            let hiddenScore = facility.scores.hidden;
+
+            // 雨の日補正があった場合、サウナ or お籠もりに1.5倍をかける
+            if (answers.q1_weather === "雨") {
+                if (targetCategory === "sauna") {
+                    saunaScore = Math.round(saunaScore * 1.5);
+                } else if (targetCategory === "relax") {
+                    relaxScore = Math.round(relaxScore * 1.5);
+                }
+            }
+
+            // スコア値をHTMLに描画
+            document.getElementById("radar-val-sauna").innerText = `${saunaScore}点`;
+            document.getElementById("radar-val-scenery").innerText = `${sceneryScore}点`;
+            document.getElementById("radar-val-meal").innerText = `${mealScore}点`;
+            document.getElementById("radar-val-relax").innerText = `${relaxScore}点`;
+            document.getElementById("radar-val-hidden").innerText = `${hiddenScore}点`;
+
+            // 各カテゴリの初期最高点を特徴度インジケーター（プログレスバー）の満点基準値とする
+            setTimeout(() => {
+                document.getElementById("radar-fill-sauna").style.width = `${Math.min(100, Math.max(8, (saunaScore / CATEGORY_MAX_SCORES.sauna) * 100))}%`;
+                document.getElementById("radar-fill-scenery").style.width = `${Math.min(100, Math.max(8, (sceneryScore / CATEGORY_MAX_SCORES.scenery) * 100))}%`;
+                document.getElementById("radar-fill-meal").style.width = `${Math.min(100, Math.max(8, (mealScore / CATEGORY_MAX_SCORES.meal) * 100))}%`;
+                document.getElementById("radar-fill-relax").style.width = `${Math.min(100, Math.max(8, (relaxScore / CATEGORY_MAX_SCORES.relax) * 100))}%`;
+                document.getElementById("radar-fill-hidden").style.width = `${Math.min(100, Math.max(8, (hiddenScore / CATEGORY_MAX_SCORES.hidden) * 100))}%`;
+            }, 150);
+
+            // 3. 住所・駐車場
+            resultAddress.innerText = facility.address;
+
+            // 駐車場情報の強調
+            if (answers.q2_transport === "車") {
+                resultParking.innerHTML = `<span style="background-color: var(--color-accent-light); padding: 4px 8px; border-radius: 8px;"><i class="fa-solid fa-parking"></i> ${facility.parking}</span> <br><small style="color:var(--color-text-light); font-weight:normal; margin-top:4px; display:block;">お車移動にぴったりな広々駐車場があります！</small>`;
+            } else {
+                resultParking.innerHTML = `<i class="fa-solid fa-parking"></i> ${facility.parking}`;
+            }
+
+            // 4. 背景グラデーション色変化
+            const screenElement = document.getElementById("screen-result");
+            screenElement.className = "screen active"; 
+            if (index === 0) {
+                screenElement.classList.add("theme-forest");
+            } else if (index === 1) {
+                screenElement.classList.add("theme-steam");
+            } else {
+                screenElement.classList.add("theme-bath");
+            }
+
+            // 5. アクションボタンのリンク書き換え
+            actionWeb.href = facility.url;
+            
+            // マップ (住所検索リンクを google.com のドメイン形式で固定)
+            actionMap.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(facility.address + " " + facility.name)}`;
+            
+            // LINE共有
+            const shareText = `一緒に千葉の「${facility.name}」温泉にいかない？診断でピッタリって出たよ！湯あがりのんびりしよ〜♨️ ${facility.url}`;
+            actionLine.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareText)}`;
+        }
+
+    </script>
+</body>
+</html>
