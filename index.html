@@ -948,6 +948,7 @@
 
     <div class="app-container">
         
+        <!-- 1. スプラッシュ・トップ画面 -->
         <div id="screen-splash" class="screen active">
             <div class="steam-bg" style="top: 10%; left: 10%;"></div>
             <div class="steam-bg" style="bottom: 15%; right: 10%;"></div>
@@ -979,6 +980,7 @@
             </div>
         </div>
 
+        <!-- 2. 診断質問画面 -->
         <div id="screen-quiz" class="screen">
             <div class="diagnostic-header">
                 <button id="btn-back" style="background:none; border:none; font-size: 1.2rem; color: var(--color-text-light); cursor: pointer; padding: 5px;">
@@ -997,7 +999,8 @@
             </div>
 
             <div class="options-container" id="options-container">
-                </div>
+                <!-- 動的に選択肢が生成されます -->
+            </div>
 
             <div class="diagnostic-footer">
                 <button class="btn btn-primary" id="btn-next" style="display: none;">
@@ -1006,11 +1009,15 @@
             </div>
         </div>
 
+        <!-- 3. 診断結果画面 -->
         <div id="screen-result" class="screen">
             
+            <!-- スタックカードエリア -->
             <div class="stack-section" id="stack-container">
-                </div>
+                <!-- 動的にスタックカード(1位~3位)が生成されます -->
+            </div>
 
+            <!-- ナビゲーションコントロール -->
             <div class="navigation-control">
                 <button class="nav-btn" id="btn-prev-card">
                     <i class="fa-solid fa-arrow-left"></i>
@@ -1025,8 +1032,10 @@
                 </button>
             </div>
 
+            <!-- 詳細情報 ＆ 口コミ ＆ スコア内訳 -->
             <div class="detail-section">
                 
+                <!-- クチコミふきだし -->
                 <div class="review-bubble">
                     <div class="review-label">
                         <i class="fa-solid fa-comment-dots"></i>
@@ -1037,14 +1046,16 @@
                     </div>
                 </div>
 
+                <!-- 各スコアのポイント可視化セクション -->
                 <div class="score-radar-section">
                     <div class="score-radar-header">
-                        <span>📊 口コミ分析に基づく特徴度スコア</span>
+                        <span><i class="fa-solid fa-chart-bar"></i> 口コミ分析に基づく特徴度スコア</span>
                         <div class="score-bonus-badge" id="score-bonus-badge">
                             <i class="fa-solid fa-cloud-showers-heavy"></i> 雨の日補正中(1.5倍)
                         </div>
                     </div>
                     <div class="score-radar-list">
+                        <!-- サウナ -->
                         <div class="score-radar-row">
                             <span class="radar-label">♨️ サウナ</span>
                             <div class="radar-bar-bg">
@@ -1052,6 +1063,7 @@
                             </div>
                             <span class="radar-val" id="radar-val-sauna">0点</span>
                         </div>
+                        <!-- 絶景 -->
                         <div class="score-radar-row">
                             <span class="radar-label">🌅 絶景</span>
                             <div class="radar-bar-bg">
@@ -1059,6 +1071,7 @@
                             </div>
                             <span class="radar-val" id="radar-val-scenery">0点</span>
                         </div>
+                        <!-- 食事 -->
                         <div class="score-radar-row">
                             <span class="radar-label">🍱 お食事</span>
                             <div class="radar-bar-bg">
@@ -1066,6 +1079,7 @@
                             </div>
                             <span class="radar-val" id="radar-val-meal">0点</span>
                         </div>
+                        <!-- お籠もり -->
                         <div class="score-radar-row">
                             <span class="radar-label">🛋️ お籠もり</span>
                             <div class="radar-bar-bg">
@@ -1073,6 +1087,7 @@
                             </div>
                             <span class="radar-val" id="radar-val-relax">0点</span>
                         </div>
+                        <!-- 穴場 -->
                         <div class="score-radar-row">
                             <span class="radar-label">🤫 穴場度</span>
                             <div class="radar-bar-bg">
@@ -1083,6 +1098,7 @@
                     </div>
                 </div>
 
+                <!-- 詳細 data テーブル -->
                 <div class="detail-title">
                     <i class="fa-solid fa-circle-info"></i>
                     <span>お役立ち施設情報</span>
@@ -1102,12 +1118,14 @@
 
             </div>
 
+            <!-- もう一度診断するボタン -->
             <div class="retry-section">
                 <button class="btn btn-outline" id="btn-restart">
                     <i class="fa-solid fa-rotate-right" style="margin-right: 6px;"></i> 別の気分で探す
                 </button>
             </div>
 
+            <!-- 4. 固定アクションバー (最下部固定) -->
             <div class="fixed-action-bar">
                 <a href="#" target="_blank" class="action-btn action-btn-web" id="action-web">
                     <i class="fa-solid fa-globe"></i>
@@ -1170,7 +1188,7 @@
                 address: "〒270-0128 千葉県流山市おおたかの森西１丁目１５−３",
                 reviews: [
                     "ドラゴンサウナ浴びたらマジ決まる",
-                    "サウナ施設の充実ぶりがすごいです！驚きました。"
+                    "サウナ施設の充実ぶりがすごいです！驚しました。"
                 ]
             },
             {
@@ -1183,14 +1201,14 @@
                     relax: 175,
                     hidden: 952
                 },
-                tags: ["お風呂上がりに美味しいご飯を施設内で食べたい", "ご飯が美味しい施設", "富士山が見える温泉"],
+                tags: ["ご飯が美味しい施設", "富士山が見える温泉"],
                 parking: "約240台（無料）",
                 url: "https://www.yurakirari.com/shisui/",
                 imageUrl: "https://www.yurakirari.com/yura/shisui/shisui_img/index/main02.jpg",
-                address: "〒285-0912 千葉県印旛郡酒々井町飯塚１３６1",
+                address: "〒285-0912 千葉県印旛郡酒々井町飯塚１３６１",
                 reviews: [
                     "ここの飯処はメニューが豊富で、どれを頼んでも本当に美味しい！",
-                    "のどかな田園風景を眺めながら入る露天風呂 and 美味しい和食で満たされます。"
+                    "のどかな田園風景を眺めながら入る露天風呂と美味しい和食で満たされます。"
                 ]
             },
             {
@@ -1238,11 +1256,11 @@
         // --- 2. 特徴・タグと評価用カテゴリのマッピング ---
         const FEATURE_CATEGORIES = {
             "サウナで整いたい": "sauna",
-            "お風呂上がりに美味しいご飯を施設内で食べたい": "meal",
             "岩盤浴でまったり過ごしたい": "relax",
             "東京湾が一望できる温泉": "scenery",
             "富士山が見える温泉": "scenery",
             "漫画がたくさん置いてある": "relax",
+            "落ち着いた雰囲気の隠れ家的温泉": "hidden",
             "ご飯が美味しい施設": "meal"
         };
 
@@ -1252,6 +1270,15 @@
             "meal": "お食事",
             "relax": "お籠もり",
             "hidden": "穴場"
+        };
+
+        // 各カテゴリの初期スコアにおける最大値を算出（100%基準値として利用）
+        const CATEGORY_MAX_SCORES = {
+            sauna: Math.max(...ONSEN_DB.map(o => o.scores.sauna)),
+            scenery: Math.max(...ONSEN_DB.map(o => o.scores.scenery)),
+            meal: Math.max(...ONSEN_DB.map(o => o.scores.meal)),
+            relax: Math.max(...ONSEN_DB.map(o => o.scores.relax)),
+            hidden: Math.max(...ONSEN_DB.map(o => o.scores.hidden))
         };
 
         // --- 3. 診断ステート管理 ---
@@ -1303,8 +1330,8 @@
                 type: "multiple", 
                 options: [
                     { value: "サウナで整いたい", label: "サウナで整いたい", icon: "fa-fire" },
-                    { value: "お風呂上がりに美味しいご飯を施設内で食べたい", label: "お風呂上がりの美味しいご飯", icon: "fa-bowl-rice" },
-                    { value: "岩盤浴でまったり過ごしたい", label: "岩盤浴でまったり過ごす", icon: "fa-couch" }
+                    { value: "岩盤浴でまったり過ごしたい", label: "岩盤浴でまったり過ごす", icon: "fa-couch" },
+                    { value: "漫画がたくさん置いてある", label: "漫画を読んでゴロゴロしたい", icon: "fa-book-open" }
                 ]
             },
             4: {
@@ -1315,8 +1342,8 @@
                 options: [
                     { value: "東京湾が一望できる温泉", label: "東京湾が一望できる露天", icon: "fa-water" },
                     { value: "富士山が見える温泉", label: "富士山が見える絶景", icon: "fa-mountain" },
-                    { value: "漫画がたくさん置いてある", label: "漫画がいっぱい置いてある", icon: "fa-book-open" },
-                    { value: "ご飯が美味しい施設", label: "とにかくお食事を美味しく", icon: "fa-utensils" }
+                    { value: "落ち着いた雰囲気の隠れ家的温泉", label: "落ち着いた雰囲気の隠れ家的温泉", icon: "fa-map-pin" },
+                    { value: "ご飯が美味しい施設", label: "とにかくお食事が美味しい", icon: "fa-utensils" }
                 ]
             },
             5: {
@@ -1478,14 +1505,21 @@
                     if (tag.includes("東京湾")) icon = "fa-water";
                     if (tag.includes("富士山")) icon = "fa-mountain";
                     if (tag.includes("漫画")) icon = "fa-book-open";
+                    if (tag.includes("隠れ家")) icon = "fa-map-pin";
 
-                    return { value: tag, label: tag, icon: icon };
+                    // 表示用カスタム文言
+                    let label = tag;
+                    if (tag === "漫画がたくさん置いてある") {
+                        label = "漫画を読んでゴロゴロしたい";
+                    }
+
+                    return { value: tag, label: label, icon: icon };
                 });
 
                 if (stepData.options.length === 0) {
                     stepData.options = [
                         { value: "サウナで整いたい", label: "サウナで整いたい", icon: "fa-fire" },
-                        { value: "漫画がたくさん置いてある", label: "漫画がたくさん置いてある", icon: "fa-book" }
+                        { value: "漫画がたくさん置いてある", label: "漫画を読んでゴロゴロしたい", icon: "fa-book" }
                     ];
                 }
             }
@@ -1578,7 +1612,6 @@
             const chosenTag = answers.final_important;
             const targetCategory = FEATURE_CATEGORIES[chosenTag] || "relax"; 
 
-            // 元のデータベースから補正スコアを計算
             let calcList = ONSEN_DB.map(onsen => {
                 let baseScore = onsen.scores[targetCategory] || 0;
 
@@ -1595,13 +1628,10 @@
             });
 
             // 【最重要】絶景の完全除外ロジック
-            // 最終質問（最重要項目）で「東京湾が一望できる温泉」または「富士山が見える温泉」が選ばれた場合
-            // 初期の「絶景スコア（scenery）」が0である施設は、候補から完全に除外する
             if (chosenTag === "東京湾が一望できる温泉" || chosenTag === "富士山が見える温泉") {
                 calcList = calcList.filter(onsen => onsen.scores.scenery > 0);
             }
 
-            // スコアが高い順にソートして上位3件を抽出
             calcList.sort((a, b) => b.finalCalcScore - a.finalCalcScore);
             recommendedFacilities = calcList.slice(0, 3);
 
@@ -1617,6 +1647,9 @@
             const targetCategory = FEATURE_CATEGORIES[chosenTag] || "relax";
             const categoryJaName = CATEGORY_JA[targetCategory] || "おすすめ";
 
+            // 各カテゴリの初期最高点を適合率100%の分母基準値とする
+            const maxScore = CATEGORY_MAX_SCORES[targetCategory] || 1000;
+
             recommendedFacilities.forEach((facility, idx) => {
                 let rankClass = "hidden";
                 if (idx === 0) rankClass = "rank-1";
@@ -1628,6 +1661,9 @@
                 card.id = `card-rank-${idx}`;
 
                 const carBadgeStyle = (answers.q2_transport === "車") ? "display: flex;" : "display: none;";
+
+                // 各カテゴリスコアの最高点を100点満点として適合率を算出
+                const matchRate = Math.min(100, Math.round((facility.finalCalcScore / maxScore) * 100));
 
                 card.innerHTML = `
                     <div class="card-image-wrapper">
@@ -1653,7 +1689,7 @@
                         <div class="indicator-container">
                             <div class="indicator-label">
                                 <span>こだわり度（${categoryJaName}）</span>
-                                <span>適合率 ${Math.min(100, Math.round((facility.finalCalcScore / 1300) * 100))}%</span>
+                                <span>適合率 ${matchRate}%</span>
                             </div>
                             <div class="indicator-bar-bg">
                                 <div class="indicator-bar-fill" id="bar-fill-${idx}"></div>
@@ -1667,7 +1703,7 @@
                 setTimeout(() => {
                     const fillBar = document.getElementById(`bar-fill-${idx}`);
                     if (fillBar) {
-                        const pct = Math.min(100, Math.round((facility.finalCalcScore / 1300) * 100));
+                        const pct = Math.min(100, Math.round((facility.finalCalcScore / maxScore) * 100));
                         fillBar.style.width = `${Math.max(15, pct)}%`; 
                     }
                 }, 100);
@@ -1695,7 +1731,6 @@
                 }
             }
 
-            // ドットの個数は現在残っているレコメンド数（最大3）に合わせる
             const dots = dotsContainer.querySelectorAll(".dot");
             dots.forEach((dot, idx) => {
                 if (idx === currentCardIndex) {
@@ -1760,14 +1795,13 @@
             document.getElementById("radar-val-relax").innerText = `${relaxScore}点`;
             document.getElementById("radar-val-hidden").innerText = `${hiddenScore}点`;
 
-            // 最大値を1300としてプログレスバーを動的に伸ばす (アニメーション用)
-            const maxScore = 1300;
+            // 各カテゴリの初期最高点を特徴度インジケーター（プログレスバー）の満点基準値とする
             setTimeout(() => {
-                document.getElementById("radar-fill-sauna").style.width = `${Math.min(100, Math.max(8, (saunaScore / maxScore) * 100))}%`;
-                document.getElementById("radar-fill-scenery").style.width = `${Math.min(100, Math.max(8, (sceneryScore / maxScore) * 100))}%`;
-                document.getElementById("radar-fill-meal").style.width = `${Math.min(100, Math.max(8, (mealScore / maxScore) * 100))}%`;
-                document.getElementById("radar-fill-relax").style.width = `${Math.min(100, Math.max(8, (relaxScore / maxScore) * 100))}%`;
-                document.getElementById("radar-fill-hidden").style.width = `${Math.min(100, Math.max(8, (hiddenScore / maxScore) * 100))}%`;
+                document.getElementById("radar-fill-sauna").style.width = `${Math.min(100, Math.max(8, (saunaScore / CATEGORY_MAX_SCORES.sauna) * 100))}%`;
+                document.getElementById("radar-fill-scenery").style.width = `${Math.min(100, Math.max(8, (sceneryScore / CATEGORY_MAX_SCORES.scenery) * 100))}%`;
+                document.getElementById("radar-fill-meal").style.width = `${Math.min(100, Math.max(8, (mealScore / CATEGORY_MAX_SCORES.meal) * 100))}%`;
+                document.getElementById("radar-fill-relax").style.width = `${Math.min(100, Math.max(8, (relaxScore / CATEGORY_MAX_SCORES.relax) * 100))}%`;
+                document.getElementById("radar-fill-hidden").style.width = `${Math.min(100, Math.max(8, (hiddenScore / CATEGORY_MAX_SCORES.hidden) * 100))}%`;
             }, 150);
 
             // 3. 住所・駐車場
