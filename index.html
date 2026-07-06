@@ -225,7 +225,7 @@
 
         .splash-caption {
             font-size: 0.85rem;
-            color: var(--color-text-light);
+            color: var(--text-light);
             margin-top: 15px;
         }
 
@@ -1167,8 +1167,8 @@
                 imageUrl: "https://www.jfa.jp/img/cache/5f0294f0-1110-4837-80fd-567bd3093d95.jpg",
                 address: "〒261-0022 千葉県千葉市美浜区美浜２６",
                 reviews: [
-                    "東京湾が見渡せるオーシャンビューの露天風呂がとにかく最高。",
-                    "大海原と富士山、都内のビル群、東京湾を渡る橋まで見渡せて最高でした。"
+                    "大海原と富士山、都内のビル群、東京湾を渡る橋まで見渡せて最高でした。",
+                    "東京湾が見渡せるオーシャンビュー of 露天風呂がとにかく最高。"
                 ]
             },
             {
@@ -1187,8 +1187,8 @@
                 imageUrl: "https://img.sauna-ikitai.com/sauna/23546_20220503_015803_maTW0CNesh_large.jpg",
                 address: "〒270-0128 千葉県流山市おおたかの森西１丁目１５−３",
                 reviews: [
-                    "ドラゴンサウナ浴びたらマジ決まる",
-                    "サウナ施設の充実ぶりがすごいです！驚しました。"
+                    "サウナ施設の充実ぶりがすごいです！",
+                    "ドラゴンサウナ浴びたらマジ決まる"
                 ]
             },
             {
@@ -1205,7 +1205,7 @@
                 parking: "約240台（無料）",
                 url: "https://www.yurakirari.com/shisui/",
                 imageUrl: "https://www.yurakirari.com/yura/shisui/shisui_img/index/main02.jpg",
-                address: "〒285-0912 千葉県印旛郡酒々井町飯塚１３６１",
+                address: "〒285-0912 千葉県印旛郡酒々井町飯塚１３６1",
                 reviews: [
                     "ここの飯処はメニューが豊富で、どれを頼んでも本当に美味しい！",
                     "のどかな田園風景を眺めながら入る露天風呂と美味しい和食で満たされます。"
@@ -1511,6 +1511,8 @@
                     let label = tag;
                     if (tag === "漫画がたくさん置いてある") {
                         label = "漫画を読んでゴロゴロしたい";
+                    } else if (tag === "ご飯が美味しい施設") {
+                        label = "外れないご飯がある";
                     }
 
                     return { value: tag, label: label, icon: icon };
@@ -1759,7 +1761,7 @@
             const randomReview = facility.reviews[Math.floor(Math.random() * facility.reviews.length)];
             resultReview.innerHTML = `「${randomReview}」`;
 
-            // 2. 各スコアのポイント可視化 & 雨の日ブースト計算
+            // 2. 各スコアのポイント可見化 & 雨の日ブースト計算
             const chosenTag = answers.final_important;
             const targetCategory = FEATURE_CATEGORIES[chosenTag] || "relax";
             const isRainyBonusActive = (answers.q1_weather === "雨" && (targetCategory === "relax" || targetCategory === "sauna"));
