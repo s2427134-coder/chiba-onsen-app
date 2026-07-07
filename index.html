@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>千葉ほっこり温浴ナビ ｜ あなたにぴったりの湯処を</title>
-    <!-- Google Fonts (Rounded Mplus for Cute Japanese vibe) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -750,7 +748,7 @@
             color: var(--color-text-dark);
         }
 
-        /* 各スコアのポイント一覧セクション */
+        /* 各スコアのポイント可視化セクション */
         .score-radar-section {
             background-color: var(--color-white);
             border-radius: 20px;
@@ -979,7 +977,6 @@
 
     <div class="app-container">
         
-        <!-- 1. スプラッシュ・トップ画面 -->
         <div id="screen-splash" class="screen active">
             <div class="steam-bg" style="top: 10%; left: 10%;"></div>
             <div class="steam-bg" style="bottom: 15%; right: 10%;"></div>
@@ -1011,7 +1008,6 @@
             </div>
         </div>
 
-        <!-- 2. 診断質問画面 -->
         <div id="screen-quiz" class="screen">
             <div class="diagnostic-header">
                 <button id="btn-back" style="background:none; border:none; font-size: 1.2rem; color: var(--color-text-light); cursor: pointer; padding: 5px;">
@@ -1030,8 +1026,7 @@
             </div>
 
             <div class="options-container" id="options-container">
-                <!-- 動的に選択肢が生成されます -->
-            </div>
+                </div>
 
             <div class="diagnostic-footer">
                 <button class="btn btn-primary" id="btn-next" style="display: none;">
@@ -1040,15 +1035,11 @@
             </div>
         </div>
 
-        <!-- 3. 診断結果画面 -->
         <div id="screen-result" class="screen">
             
-            <!-- スタックカードエリア -->
             <div class="stack-section" id="stack-container">
-                <!-- 動的にスタックカード(1位~3位)が生成されます -->
-            </div>
+                </div>
 
-            <!-- ナビゲーションコントロール -->
             <div class="navigation-control">
                 <button class="nav-btn" id="btn-prev-card">
                     <i class="fa-solid fa-arrow-left"></i>
@@ -1063,10 +1054,8 @@
                 </button>
             </div>
 
-            <!-- 詳細情報 ＆ 口コミ ＆ スコア内訳 -->
             <div class="detail-section">
                 
-                <!-- クチコミふきだし -->
                 <div class="review-bubble">
                     <div class="review-label">
                         <i class="fa-solid fa-comment-dots"></i>
@@ -1077,7 +1066,6 @@
                     </div>
                 </div>
 
-                <!-- 【✨ この温泉のおすすめ解説 ✨】セクション -->
                 <div class="recommend-explanation-box">
                     <div class="recommend-explanation-title">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -1088,7 +1076,6 @@
                     </div>
                 </div>
 
-                <!-- 各スコアのポイント可視化セクション -->
                 <div class="score-radar-section">
                     <div class="score-radar-header">
                         <span><i class="fa-solid fa-chart-bar"></i> 口コミ分析に基づく特徴度スコア</span>
@@ -1097,7 +1084,6 @@
                         </div>
                     </div>
                     <div class="score-radar-list">
-                        <!-- サウナ -->
                         <div class="score-radar-row">
                             <span class="radar-label">♨️ サウナ</span>
                             <div class="radar-bar-bg">
@@ -1105,7 +1091,6 @@
                             </div>
                             <span class="radar-val" id="radar-val-sauna">0点</span>
                         </div>
-                        <!-- 絶景 -->
                         <div class="score-radar-row">
                             <span class="radar-label">🌅 絶景</span>
                             <div class="radar-bar-bg">
@@ -1113,7 +1098,6 @@
                             </div>
                             <span class="radar-val" id="radar-val-scenery">0点</span>
                         </div>
-                        <!-- 食事 -->
                         <div class="score-radar-row">
                             <span class="radar-label">🍱 お食事</span>
                             <div class="radar-bar-bg">
@@ -1121,7 +1105,6 @@
                             </div>
                             <span class="radar-val" id="radar-val-meal">0点</span>
                         </div>
-                        <!-- お籠もり -->
                         <div class="score-radar-row">
                             <span class="radar-label">🛋️ お籠もり</span>
                             <div class="radar-bar-bg">
@@ -1129,7 +1112,6 @@
                             </div>
                             <span class="radar-val" id="radar-val-relax">0点</span>
                         </div>
-                        <!-- 穴場 -->
                         <div class="score-radar-row">
                             <span class="radar-label">🤫 穴場度</span>
                             <div class="radar-bar-bg">
@@ -1140,7 +1122,6 @@
                     </div>
                 </div>
 
-                <!-- 詳細 data テーブル -->
                 <div class="detail-title">
                     <i class="fa-solid fa-circle-info"></i>
                     <span>お役立ち施設情報</span>
@@ -1160,14 +1141,12 @@
 
             </div>
 
-            <!-- もう一度診断するボタン -->
             <div class="retry-section">
                 <button class="btn btn-outline" id="btn-restart">
                     <i class="fa-solid fa-rotate-right" style="margin-right: 6px;"></i> 別の気分で探す
                 </button>
             </div>
 
-            <!-- 4. 固定アクションバー (最下部固定) -->
             <div class="fixed-action-bar">
                 <a href="#" target="_blank" class="action-btn action-btn-web" id="action-web">
                     <i class="fa-solid fa-globe"></i>
@@ -1187,9 +1166,6 @@
 
     </div>
 
-    <!-- ----------------------------------
-     * JavaScript ロジック実装
-     * ---------------------------------- -->
     <script>
         // --- 1. マスターデータベースの定義 ---
         const ONSEN_DB = [
@@ -1305,10 +1281,10 @@
                 hidden: "千葉のベイエリアに佇む洗練された大人のオアシス。平日の昼下がりなどは波音だけが響く静寂な空間となり、都会の喧騒を忘れさせてくれます。お湯にじっくり浸かり、海原を眺めて呼吸を整える静かな時間は、現代人のための究極の隠れ家となります。"
             },
             2: { // スパメッツァおおたか 竜泉寺の湯
-                sauna: "5台のストーブが放つ『ドラゴンロウリュ』の圧倒的な熱風はサウナファンを魅了して止みません。深さのある冷水風呂や、極上の外気浴スペースも完備されており、まさに完璧なととのいへと導かれます。最先端のこだわり設備で、未体験の深いリフレッシュをぜひ実感してください。",
+                sauna: "5台のストーブが放つ『ドラゴンロウリュ』の圧倒的な熱風はサウナファンを魅了して止みません。深さのある冷水風呂や、極上の外気浴スペースも完備されており、まさに完璧なととのいへと導かれます。最先端 of こだわり設備で、未体験の深いリフレッシュをぜひ実感してください。",
                 scenery: "洗練されたライトアップが美しい和モダンな露天空間は、都会にいながら非日常の情緒を味あわせてくれます。きらめく湯面を眺めながら炭酸泉や天然温泉に浸かれば、まるで別世界に迷い込んだかのような幻想的な美しさに心から包まれ、贅沢な静寂を堪能できます。",
                 meal: "サウナ後に美味しく食べられるように工夫された旨辛な『サ飯』や、本格的な和の定食が勢揃い。どのメニューを選んでも味わい深く、お風呂上がりの至福の一時をより豊かに彩ってくれます。温かく活気のある雰囲気の中、親しい方と美味しい食卓を囲んで会話も弾むはずです。",
-                relax: "お洒落な本棚に囲まれた圧倒的なラウンジスペースはまさに秘密基地。多様な岩盤浴房や個室風の読書ブース、ゴロゴロ休めるお座敷があり、お気に入りの漫画や本を片手に一日中思い思いの寛ぎスタイルでダラダラと贅沢なお籠もり時間を過ごせます。",
+                relax: "お洒落な本棚に囲まれた圧倒的なラウンジスペースは秘密基地。多様な岩盤浴房や個室風の読書ブース、ゴロゴロ休めるお座敷があり、お気に入りの漫画や本を片手に一日中思い思いの寛ぎスタイルでダラダラと贅沢なお籠もり時間を過ごせます。",
                 hidden: "最先端の人気スポットでありながら、早朝や平日の夜などは落ち着いた手つかずの静寂に包まれます。広々とした温浴エリアの中で、自分のお気に入りの隠れスポットを見つけ、ゆっくりと美肌の湯に身体を沈めれば、極上のリラックスが心と身体を和ませてくれます。"
             },
             3: { // 酒々井温泉 湯楽の里
@@ -1329,7 +1305,7 @@
                 sauna: "高温で熱気がしっかり充満する本格タワーサウナが自慢。芯からじっくりと身体を温めて爽快な汗を流した後は、野田の豊かな自然に囲まれた静寂な露天エリアでの外気浴へ。木々の揺れる爽やかな風を全身に浴びて深く呼吸すれば、日常の疲れが一気に吹き飛ぶ格別のととのいへ。",
                 scenery: "美しく手入れされた本格的な日本庭園風の露天エリアは風情たっぷり。季節ごとに表情を変える美しい木々や花々を眺めながら温泉に身体をゆだねれば、まるで遠く高雅な和の温泉地に来たかのような上品で静寂な絶景のひとときを心ゆくまで堪能することができます。",
                 meal: "一流の和食職人が丁寧に出汁を取ったハズレのない本格和食御膳が自慢。旬の食材を上品に仕立てた絶品お刺身や天ぷら、湯上がりに身体に染みる和の甘味など、お腹も心も和やかに満たしてくれるおもてなしの美味が広々とした畳のお食事処でごゆっくり楽しめます。",
-                relax: "スマホを持ち込めないからこそ、完全にデジタルから遮断された真のデジタルデトックスが叶う究極の岩盤浴。追加料金なしで利用できる多様なサウナや岩盤浴、そしてゴロゴロ寝転がれるお座敷休憩処で、文字通り心も身体も空っぽにして至福のまったりお籠もりに没頭できます。",
+                relax: "スマホを持ち込めないからこそ、完全にデジタルから遮断された真のデジタルデトックスが叶う究極の岩盤浴。追加料金なしで利用できる多様なサウナや岩盤浴、誠にゴロゴロ寝転がれるお座敷休憩処で、文字通り心も身体も空っぽにして至福のまったりお籠もりに没頭できます。",
                 hidden: "野田の豊かな自然と落ち着いた和の静寂に包まれた、知る人ぞ知る大人の隠れ家温泉。日々の慌ただしさから完全に隔離された心地よい和風空間で、喧騒を気にせず、自分のためだけの穏やかな時の流れを極上の湯船と共に贅沢に独り占めすることができます。"
             }
         };
@@ -1364,7 +1340,7 @@
             "hidden": "穴場"
         };
 
-        // 各カテゴリの初期スコアにおける最大値を算出（100%基準値として利用）
+        // 各カテゴリの初期スコアにおける最大値
         const CATEGORY_MAX_SCORES = {
             sauna: Math.max(...ONSEN_DB.map(o => o.scores.sauna)),
             scenery: Math.max(...ONSEN_DB.map(o => o.scores.scenery)),
@@ -1379,16 +1355,17 @@
 
         // ユーザー回答の一時保存
         let answers = {
-            q1_weather: "",  // "晴れ", "曇り", "雨"
-            q2_transport: "", // "徒歩", "自転車", "車", "電車"
-            q3_moods: [],     // Q3選択配列
-            q4_styles: [],    // Q4選択配列
-            final_important: "" // 最重要項目
+            q1_weather: "",  
+            q2_transport: "", 
+            q3_moods: [],     
+            q4_styles: [],    
+            final_important: "" 
         };
 
         // レコメンド結果
         let recommendedFacilities = []; 
         let currentCardIndex = 0; 
+        let currentMaxScore = 1000; // 現在の選択・天候補正後の最高基準点
 
         // --- 5. 質問データの定義 ---
         const quizSteps = {
@@ -1434,7 +1411,7 @@
                 options: [
                     { value: "東京湾が一望できる温泉", label: "東京湾が一望できる露天", icon: "fa-water" },
                     { value: "富士山が見える温泉", label: "富士山が見える絶景", icon: "fa-mountain" },
-                    { value: "落ち着いた雰囲気の隠れ家的温泉", label: "落ち着いた雰囲気の隠れ家的な温泉", icon: "fa-map-pin" },
+                    { value: "落ち着いた雰囲気の隠れ家的な温泉", label: "落ち着いた雰囲気の隠れ家的な温泉", icon: "fa-map-pin" },
                     { value: "ご飯が美味しい施設", label: "外れないご飯がある", icon: "fa-utensils" }
                 ]
             },
@@ -1496,7 +1473,6 @@
 
         btnNext.addEventListener("click", () => {
             if (currentStep < totalSteps) {
-                // 各画面の回答チェック
                 if (currentStep === 3 && answers.q3_moods.length === 0) {
                     showValidationAlert("気分を1つ以上選んでね");
                     return;
@@ -1509,7 +1485,6 @@
                 currentStep++;
                 renderQuizStep();
             } else {
-                // 最終決定
                 if (!answers.final_important) {
                     showValidationAlert("一番大事にしたいこだわりを1つ選んでね");
                     return;
@@ -1523,7 +1498,6 @@
             changeScreen(screenResult, screenSplash);
         });
 
-        // 矢印キーでのカード切替
         btnPrevCard.addEventListener("click", () => {
             if (currentCardIndex > 0) {
                 changeCardIndex(currentCardIndex - 1);
@@ -1537,15 +1511,12 @@
         });
 
         // --- 8. 各種ナビゲーション/UI関数 ---
-
-        // フェード付画面切り替え
         function changeScreen(fromScreen, toScreen) {
             fromScreen.classList.remove("active");
             toScreen.classList.add("active");
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 警告トースト表示
         function showValidationAlert(message) {
             const toast = document.createElement("div");
             toast.style.position = "fixed";
@@ -1572,9 +1543,7 @@
             }, 2000);
         }
 
-        // 診断の描画
         function renderQuizStep() {
-            // プログレスバー
             const percent = ((currentStep - 1) / totalSteps) * 100;
             progressBar.style.width = `${percent}%`;
             progressText.innerText = `Q${currentStep} / ${totalSteps}`;
@@ -1586,7 +1555,6 @@
 
             optionsContainer.innerHTML = "";
 
-            // Q5(最終ステップ)の場合は、Q3・Q4で選ばれたものを選択肢として動的生成する
             if (currentStep === 5) {
                 const combinedTags = [...answers.q3_moods, ...answers.q4_styles];
                 stepData.options = combinedTags.map(tag => {
@@ -1599,7 +1567,6 @@
                     if (tag.includes("漫画")) icon = "fa-book-open";
                     if (tag.includes("隠れ家")) icon = "fa-map-pin";
 
-                    // 表示用カスタム文言
                     let label = tag;
                     if (tag === "漫画がたくさん置いてある") {
                         label = "漫画を読んでゴロゴロしたい";
@@ -1618,7 +1585,6 @@
                 }
             }
 
-            // 選択肢を描画
             stepData.options.forEach(opt => {
                 const card = document.createElement("div");
                 card.className = "option-card";
@@ -1645,7 +1611,6 @@
                 }
                 card.appendChild(checkElement);
 
-                // 初期選択状態の復元
                 if (currentStep === 1 && answers.q1_weather === opt.value) card.classList.add("selected");
                 if (currentStep === 2 && answers.q2_transport === opt.value) card.classList.add("selected");
                 if (currentStep === 3 && answers.q3_moods.includes(opt.value)) card.classList.add("selected");
@@ -1667,7 +1632,6 @@
             }
         }
 
-        // オプション選択時のデータ保持
         function handleOptionClick(val, cardElement, type) {
             if (type === "single") {
                 if (currentStep === 1) {
@@ -1706,11 +1670,20 @@
             const chosenTag = answers.final_important;
             const targetCategory = FEATURE_CATEGORIES[chosenTag] || "relax"; 
 
+            // 基本となる最高点を取得
+            let baseMaxScore = CATEGORY_MAX_SCORES[targetCategory] || 1000;
+
+            // 雨天時のブーストが対象カテゴリに該当するか
+            const isRainBoost = (answers.q1_weather === "雨" && (targetCategory === "relax" || targetCategory === "sauna"));
+            
+            // 雨天時補正がある場合は、満点基準（分母）も1.5倍に引き上げる
+            currentMaxScore = isRainBoost ? Math.round(baseMaxScore * 1.5) : baseMaxScore;
+
             let calcList = ONSEN_DB.map(onsen => {
                 let baseScore = onsen.scores[targetCategory] || 0;
 
-                // 雨天時のブースト補正
-                if (answers.q1_weather === "雨" && (targetCategory === "relax" || targetCategory === "sauna")) {
+                // スコア自体の雨の日ブースト補正
+                if (isRainBoost) {
                     baseScore = Math.round(baseScore * 1.5);
                 }
 
@@ -1721,7 +1694,6 @@
                 };
             });
 
-            // 【最重要】絶景の完全除外ロジック
             if (chosenTag === "東京湾が一望できる温泉" || chosenTag === "富士山が見える温泉") {
                 calcList = calcList.filter(onsen => onsen.scores.scenery > 0);
             }
@@ -1741,9 +1713,6 @@
             const targetCategory = FEATURE_CATEGORIES[chosenTag] || "relax";
             const categoryJaName = CATEGORY_JA[targetCategory] || "おすすめ";
 
-            // 各カテゴリの初期最高点を適合率100%の分母基準値とする
-            const maxScore = CATEGORY_MAX_SCORES[targetCategory] || 1000;
-
             recommendedFacilities.forEach((facility, idx) => {
                 let rankClass = "hidden";
                 if (idx === 0) rankClass = "rank-1";
@@ -1756,8 +1725,8 @@
 
                 const carBadgeStyle = (answers.q2_transport === "車") ? "display: flex;" : "display: none;";
 
-                // 各カテゴリスコアの最高点を100点満点として適合率を算出
-                const matchRate = Math.min(100, Math.round((facility.finalCalcScore / maxScore) * 100));
+                // 補正対応後の最高点を基準に適合率を計算
+                const matchRate = Math.min(100, Math.round((facility.finalCalcScore / currentMaxScore) * 100));
 
                 card.innerHTML = `
                     <div class="card-image-wrapper">
@@ -1797,14 +1766,12 @@
                 setTimeout(() => {
                     const fillBar = document.getElementById(`bar-fill-${idx}`);
                     if (fillBar) {
-                        const pct = Math.min(100, Math.round((facility.finalCalcScore / maxScore) * 100));
-                        fillBar.style.width = `${Math.max(15, pct)}%`; 
+                        fillBar.style.width = `${Math.max(15, matchRate)}%`; 
                     }
                 }, 100);
             });
         }
 
-        // 表示するカードの切り替え
         function changeCardIndex(newIndex) {
             currentCardIndex = newIndex;
 
@@ -1833,7 +1800,6 @@
                     dot.classList.remove("active");
                 }
                 
-                // 候補が3件未満の場合に非表示にする
                 if (idx >= recommendedFacilities.length) {
                     dot.style.display = "none";
                 } else {
@@ -1844,32 +1810,25 @@
             updateResultDetails(currentCardIndex);
         }
 
-        // カードインデックスに応じたテーマ色と詳細データの更新
         function updateResultDetails(index) {
             const facility = recommendedFacilities[index];
             if (!facility) return;
 
-            // 1. クチコミ (配列からランダムで1件選択)
             const randomReview = facility.reviews[Math.floor(Math.random() * facility.reviews.length)];
             resultReview.innerHTML = `「${randomReview}」`;
 
-            // 2. おすすめポイント動的解説の埋め込み (最重要・各最重視項目×各施設の計25パターンを動的に切り替え)
             const chosenTag = answers.final_important;
             const targetCategory = FEATURE_CATEGORIES[chosenTag] || "relax";
             const chosenTagName = DISPLAY_IMPORTANT_NAMES[chosenTag] || chosenTag;
             
-            // 25パターン対応オブジェクトから該当解説文を取得
             const explanationBody = ONSEN_EXPLANATIONS[facility.id]?.[targetCategory] || "極上の和モダン空間と温かい湯船が、心と身体を優しく包み込みます。ごゆっくり至福のひとときをお過ごしください。";
-            
-            // 構成ルール「【選んだ項目名】を選んだあなたに〜」を完全に動的生成して結合
             const fullExplanation = `「【${chosenTagName}】を選んだあなたにぴったりの日帰り温泉は【${facility.name}】です！<br><br>${explanationBody}<br><br>この温泉は、きっとあなたに最高の癒しを与えてくれるでしょう！」`;
             
             document.getElementById("result-explanation").innerHTML = fullExplanation;
 
-            // 3. 各スコアのポイント可見化 & 雨の日ブースト計算
+            // 雨の日かつ「サウナ」または「お籠もり」が選ばれている場合のフラグ
             const isRainyBonusActive = (answers.q1_weather === "雨" && (targetCategory === "relax" || targetCategory === "sauna"));
 
-            // 雨の日バッジ表示
             const bonusBadge = document.getElementById("score-bonus-badge");
             if (isRainyBonusActive) {
                 bonusBadge.style.display = "inline-flex";
@@ -1877,49 +1836,44 @@
                 bonusBadge.style.display = "none";
             }
 
-            // 各種スコアの取得と雨の日補正の適用
             let saunaScore = facility.scores.sauna;
             let sceneryScore = facility.scores.scenery;
             let mealScore = facility.scores.meal;
             let relaxScore = facility.scores.relax;
             let hiddenScore = facility.scores.hidden;
 
-            // 雨の日補正があった場合、サウナ or お籠もりに1.5倍をかける
+            // 各レーダーチャート用プログレスバー表示の個別雨の日ブースト
             if (answers.q1_weather === "雨") {
-                if (targetCategory === "sauna") {
-                    saunaScore = Math.round(saunaScore * 1.5);
-                } else if (targetCategory === "relax") {
-                    relaxScore = Math.round(relaxScore * 1.5);
-                }
+                saunaScore = Math.round(saunaScore * 1.5);
+                relaxScore = Math.round(relaxScore * 1.5);
             }
 
-            // スコア値をHTMLに描画
             document.getElementById("radar-val-sauna").innerText = `${saunaScore}点`;
             document.getElementById("radar-val-scenery").innerText = `${sceneryScore}点`;
             document.getElementById("radar-val-meal").innerText = `${mealScore}点`;
             document.getElementById("radar-val-relax").innerText = `${relaxScore}点`;
             document.getElementById("radar-val-hidden").innerText = `${hiddenScore}点`;
 
-            // 各カテゴリの初期最高点を特徴度インジケーター（プログレスバー）の満点基準値とする
+            // レーダーバー表示時の分母マックス設定（雨の日補正後の最高値に対応させる）
+            const maxSauna = answers.q1_weather === "雨" ? Math.round(CATEGORY_MAX_SCORES.sauna * 1.5) : CATEGORY_MAX_SCORES.sauna;
+            const maxRelax = answers.q1_weather === "雨" ? Math.round(CATEGORY_MAX_SCORES.relax * 1.5) : CATEGORY_MAX_SCORES.relax;
+
             setTimeout(() => {
-                document.getElementById("radar-fill-sauna").style.width = `${Math.min(100, Math.max(8, (saunaScore / CATEGORY_MAX_SCORES.sauna) * 100))}%`;
+                document.getElementById("radar-fill-sauna").style.width = `${Math.min(100, Math.max(8, (saunaScore / maxSauna) * 100))}%`;
                 document.getElementById("radar-fill-scenery").style.width = `${Math.min(100, Math.max(8, (sceneryScore / CATEGORY_MAX_SCORES.scenery) * 100))}%`;
                 document.getElementById("radar-fill-meal").style.width = `${Math.min(100, Math.max(8, (mealScore / CATEGORY_MAX_SCORES.meal) * 100))}%`;
-                document.getElementById("radar-fill-relax").style.width = `${Math.min(100, Math.max(8, (relaxScore / CATEGORY_MAX_SCORES.relax) * 100))}%`;
+                document.getElementById("radar-fill-relax").style.width = `${Math.min(100, Math.max(8, (relaxScore / maxRelax) * 100))}%`;
                 document.getElementById("radar-fill-hidden").style.width = `${Math.min(100, Math.max(8, (hiddenScore / CATEGORY_MAX_SCORES.hidden) * 100))}%`;
             }, 150);
 
-            // 4. 住所・駐車場
             resultAddress.innerText = facility.address;
 
-            // 駐車場情報の強調
             if (answers.q2_transport === "車") {
                 resultParking.innerHTML = `<span style="background-color: var(--color-accent-light); padding: 4px 8px; border-radius: 8px;"><i class="fa-solid fa-parking"></i> ${facility.parking}</span> <br><small style="color:var(--color-text-light); font-weight:normal; margin-top:4px; display:block;">お車移動にぴったりな広々駐車場があります！</small>`;
             } else {
                 resultParking.innerHTML = `<i class="fa-solid fa-parking"></i> ${facility.parking}`;
             }
 
-            // 5. 背景グラデーション色変化
             const screenElement = document.getElementById("screen-result");
             screenElement.className = "screen active"; 
             if (index === 0) {
@@ -1930,13 +1884,9 @@
                 screenElement.classList.add("theme-bath");
             }
 
-            // 6. アクションボタンのリンク書き換え
             actionWeb.href = facility.url;
+            actionMap.href = `http://googleusercontent.com/maps.google.com/?q=${encodeURIComponent(facility.address + " " + facility.name)}`;
             
-            // マップ (住所検索リンクを google.com のドメイン形式で固定)
-            actionMap.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(facility.address + " " + facility.name)}`;
-            
-            // LINE共有
             const shareText = `一緒に千葉の「${facility.name}」温泉にいかない？診断でピッタリって出たよ！湯あがりのんびりしよ〜♨️ ${facility.url}`;
             actionLine.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareText)}`;
         }
