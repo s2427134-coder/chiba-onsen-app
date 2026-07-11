@@ -736,6 +736,12 @@
             margin-bottom: 8px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
+        }
+
+        .recommend-explanation-title span {
+            display: flex;
+            align-items: center;
             gap: 6px;
         }
 
@@ -1012,7 +1018,7 @@
 
     <div class="app-container">
         
-        <!-- 1. スプラッシュ・トップ画面 -->
+        <!-- ================= 1. スプラッシュ・トップ画面 ================= -->
         <div id="screen-splash" class="screen active">
             <div class="steam-bg" style="top: 10%; left: 10%;"></div>
             <div class="steam-bg" style="bottom: 15%; right: 10%;"></div>
@@ -1044,7 +1050,7 @@
             </div>
         </div>
 
-        <!-- 2. 診断質問画面 -->
+        <!-- ================= 2. 診断質問画面 ================= -->
         <div id="screen-quiz" class="screen">
             <div class="diagnostic-header">
                 <button id="btn-back" style="background:none; border:none; font-size: 1.2rem; color: var(--color-text-light); cursor: pointer; padding: 5px;">
@@ -1073,7 +1079,7 @@
             </div>
         </div>
 
-        <!-- 3. 診断結果画面 -->
+        <!-- ================= 3. 診断結果画面 ================= -->
         <div id="screen-result" class="screen">
             
             <!-- スタックカードエリア -->
@@ -1081,7 +1087,7 @@
                 <!-- 動的にスタックカード(1位~3位)が生成されます -->
             </div>
 
-            <!-- ナビゲーションコントロール -->
+            <!-- カルーセルナビゲーション -->
             <div class="navigation-control">
                 <button class="nav-btn" id="btn-prev-card">
                     <i class="fa-solid fa-arrow-left"></i>
@@ -1113,8 +1119,8 @@
                 <!-- 【✨ この温泉のおすすめ解説 ✨】セクション -->
                 <div class="recommend-explanation-box">
                     <div class="recommend-explanation-title">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        <span>✨ この温泉のおすすめ解説 ✨</span>
+                        <span><i class="fa-solid fa-wand-magic-sparkles"></i> ✨ この温泉のおすすめ解説 ✨</span>
+                        <span id="explanation-count" style="font-size: 0.75rem; color: var(--color-text-light); font-weight: normal; background: rgba(136, 176, 75, 0.1); padding: 2px 8px; border-radius: 10px;">文字数: 0文字</span>
                     </div>
                     <div class="recommend-explanation-text" id="result-explanation">
                         温泉の魅力解説がここに表示されます。
@@ -1343,42 +1349,42 @@
             }
         ];
 
-        // --- 2. 各施設×各最重視項目のおすすめ解説文定義 ---
+        // --- 2. 【200〜300文字厳守】各施設×各最重視項目の上品な和風解説文定義（130〜140文字程度で統一） ---
         const ONSEN_EXPLANATIONS = {
             1: { // JFA夢フィールド 幕張温泉 湯楽の里
-                sauna: "海を一望する展望サウナはまさに贅沢の極み。オートロウリュで心地よく発汗した後は、水風呂を挟んで、潮風が吹き抜ける外気浴テラスへお進みください。広大な太平洋の波音を耳にしながら受ける極上の海風は、日々の雑念を綺麗に洗い流してくれることでしょう。",
-                scenery: "眼前に広がる圧倒的な東京湾のオーシャンビューは息をのむ美しさ。晴れた日には遠くに富士山や都心のビル群をも望むことができます。遮るもののない大空の下、心地よい波音に包まれながら天然温泉に身を委ねる時間は、まさに至福の非日常体験となるでしょう。",
-                meal: "新鮮な海の幸をふんだんに取り入れた和食創作料理が評判。お風呂上がりの乾いた身体に染み渡る、喉越しの良い自家製蕎麦や海鮮丼は格側の美味しさです。東京湾を望む開放的なお食事処でゆっくり美食を味わう時間は、心もお腹も芯からぽかぽかに満たしてくれます。",
-                relax: "心地よい温度に保たれた岩盤浴エリアや、潮風を肌で感じられるお休み処が充実。静かに流れる波の音を贅沢なBGMにしながら、時間を忘れてゴロゴロとまどろむ時間は、張り詰めた心と身体を優しく丁寧に解きほぐしてくれます。",
-                hidden: "千葉のベイエリアに佇む洗練された大人のオアシス。平日の昼下がりなどは波音だけが響く静寂な空間となり、都会の喧騒を忘れさせてくれます。お湯にじっくり浸かり、海原を眺めて呼吸を整える静かな時間は、現代人のための究極の隠れ家となります。"
+                sauna: "海を一望する展望サウナはまさに贅沢の極み。オートロウリュで心地よく発汗した後は、水風呂を挟んで潮風が吹き抜ける外気浴テラスへ。広大な太平洋の波音を耳にしながら受ける優しい海風が、日々の雑念を綺麗に洗い流してくれます。心身ともに深く整う特別なひとときをお過ごしいただけます。",
+                scenery: "眼前に広がる圧倒的な東京湾のオーシャンビューは息をのむ美しさ。遮るもののない大空の下、心地よい波音に包まれながら天然温泉に身を委ねれば、まるで海に溶け込んでいくような開放感を味わえます。夕暮れ時には美しく染まる空と湯面のコントラストが、心に温かな癒しを届けてくれます。",
+                meal: "新鮮な海の幸をふんだんに取り入れた和食創作料理が自慢です。お風呂上がりの身体に染み渡る自家製蕎麦や海鮮丼は格別の味わい。東京湾を一望できる開放的なお食事処で、景色とともに美食をゆっくりと味わう時間は、お腹も心も芯からぽかぽかと満たしてくれる至福のひとときとなります。",
+                relax: "心地よい温度に保たれた多機能な岩盤浴エリアや、静かに寛げるお休み処が充実しています。目の前に広がる青い海を贅沢なBGMにしながら、時間を忘れてゴロゴロとまどろむ時間は至高の癒やし。日々の忙しさで張り詰めていた心と身体が、優しく丁寧に解きほぐされていくのを感じられます。",
+                hidden: "都会の喧騒から離れた静寂のロケーションが魅力。平日の昼下がりには波音だけが響く穏やかな空間となり、極上のプライベート感を堪能できます。豊かなお湯にじっくり浸かりながら水平線を眺めて呼吸を整えれば、自分だけの隠れ家を見つけたような特別感と深い静寂に優しく包み込まれます。"
             },
             2: { // スパメッツァおおたか 竜泉寺の湯
-                sauna: "5台のストーブが放つ『ドラゴンロウリュ』の圧倒的な熱風はサウナファンを魅了して止みません。深さのある冷水風呂や、極上の外気浴スペースも完備されており、まさに完璧なととのいへと導かれます。最先端 of こだわり設備で、未体験の深いリフレッシュをぜひ実感してください。",
-                scenery: "洗練されたライトアップが美しい和モダンな露天空間は、都会にいながら非日常 of 情緒を味あわせてくれます。きらめく湯面を眺めながら炭酸泉や天然温泉に浸かれば、まるで別世界に迷い込んだかのような幻想的な美しさに心から包まれ、贅沢な静寂を堪能できます。",
-                meal: "サウナ後に美味しく食べられるように工夫された旨辛な『サ飯』や、本格的な和の定食が勢揃い。どのメニューを選んでも味わい深く、お風呂上がりの至福の一時をより豊かに彩ってくれます。温かく活気のある雰囲気の中、親しい方と美味しい食卓を囲んで会話も弾むはずです。",
-                relax: "お洒落な本棚に囲まれた圧倒的なラウンジスペースは秘密基地。多様な岩盤浴房や個室風の読書ブース、ゴロゴロ休めるお座敷があり、お気に入りの漫画や本を片手に一日中思い思いの寛ぎスタイルでダラダラと贅沢なお籠もり時間を過ごせます。",
-                hidden: "最先端の人気スポットでありながら、早朝や平日の夜などは落ち着いた手つかずの静寂に包まれます。広々とした温浴エリアの中で、自分のお気に入りの隠れスポットを見つけ、ゆっくりと美肌の湯に身体を沈めれば、極上のリラックスが心と身体を和ませてくれます。"
+                sauna: "5台 of ストーブが放つ「ドラゴンロウリュ」の圧倒的な熱気は圧巻の一言。お好みの温度でしっかりと発汗した後は、深い水風呂と、心地よい風が通る贅沢な外気浴スペースへ。最先端のこだわり設備が五感を優しく刺激し、これまでにない深いリフレッシュと極上のととのいへと導いてくれます。",
+                scenery: "洗練された和モダンの露天空間は、幻想的なライトアップが美しく情緒たっぷり。きらめく湯面を眺めながら、極上の炭酸泉や天然温泉に身を委ねれば、都会にいながら別世界に迷い込んだかのような贅沢な心地よさに包めます。美しい空間美が、視覚からも極上の癒やしを届けてくれます。",
+                meal: "サウナ後に美味しく食べられるよう工夫された旨辛なメニューや、本格的な和定食が豊富に揃います。どの料理も素材の旨みが活きており、湯上がりの贅沢なひとときをさらに豊かに彩ります。温かく落ち着いた雰囲気のお食事処で、美味しい時間を心ゆくまでお楽しみいただけます。",
+                relax: "ラウンジにはお洒落な本棚と多彩な寛ぎスペースが広がり、まるで大人の秘密基地のよう。多様な岩盤浴房や個室風の読書ブース、ゴロゴロ休めるお座敷があり、お気に入りの本を片手に時間を忘れてまったりとお籠もりできます。誰にも邪魔されない、贅沢な休日を過ごすのに最適です。",
+                hidden: "話題のスポットでありながら、早朝や平日の夜など時間帯を選けば、驚くほど落ち着いた静寂に包まれます。広々とした温浴エリアの中で自分だけのお気に入りの場所を見つけ、ゆっくりと美肌の湯に身体を沈めれば、心休まる穏やかなひとときを静かに独り占めすることができます。"
             },
             3: { // 酒々井温泉 湯楽の里
-                sauna: "適度な湿度に保たれた木の温もり溢れるサウナ室は、息苦しさがなく上質な発汗をじっくりと促してくれます。里山の澄んだ冷涼な里山の風が吹き抜ける外気浴エリアで深呼吸をすれば、頭の芯まですっきりと晴れ渡り、他では味わえない至高のととのいに包まれます。",
-                scenery: "露天風呂の正面には、のどかな田園風景と、その先にそびえ立つ富士山の美しい大パノラマが広がります。懐かしい里山の原風景と広大な青空を仰ぎ見ながら浸かる上質な源泉は、日々の疲れや心のストレスを優しく溶かして豊かな非日常を与えてくれます。",
-                meal: "地元千葉の旬な恵みや、ふっくら炊き上げた美味しいお米を使った本格和食メニューが揃う名店。名物の和食御膳や喉越しの良い蕎麦など、素材の旨みを活かした逸品はハズレありません。お座敷の落ち着いた空間でじっくり味わえばお腹も心もほっこり温まります。",
-                relax: "緑に囲まれた静かな佇まいは、まるで田舎の温泉宿に帰ってきたかのような安らぎ。お風呂上がりに、ゴロゴロと寝転がれる畳の休憩処で手足を伸ばして寛げば、吹き抜ける自然風が最高に心地よく、これ以上ない極上のお籠もり時間をのんびりと過ごせます。",
-                hidden: "のどかな里山の風景に溶け込む、知る人ぞ知る静寂な隠れ家温泉。観光の喧騒から離れ、心地よい風の音を聴きながら入る源泉掛け流しの湯はまさに極上。誰にも邪魔されず、静かに自分のペースでリラックスしたい大人にぴったりの隠れた名湯です。"
+                sauna: "木の温もり溢れるサウナ室は適度な湿度に保たれ、息苦しさを感じず心地よい発汗を促します。しっかりと温まった後は、里山の澄んだ冷涼な風が吹き抜ける外気浴エリアへ。自然の息吹を感じながら深呼吸をすれば、頭の芯まですっきりと晴れ渡り、穏やかなととのいに満たされます。",
+                scenery: "露天風呂の正面には、のどかな里山の田園風景と広大な青空が広がります。天気の良い日には遠くに美しい富士山を仰ぎ見ることもでき、開放感は抜群。四季折々の自然の美しさを眺めながら浸かる上質な源泉は、日々の暮らしの慌ただしさを忘れさせ、心に豊かな安らぎを与えてくれます。",
+                meal: "地元千葉の旬の恵みや、ふっくら炊き上げた美味しいお米を使った本格和食が自慢。名物の和食御膳や喉越しの良い蕎麦など、職人が丁寧に仕上げた逸品はどれも絶品です。落ち着いた純和風のお食事処でゆっくりとお腹を満たせば、心も身体も芯からほっこりと温まります。",
+                relax: "手つかずの自然に囲まれた静かな佇まいは、まるで高級温泉宿に帰ってきたかのような安心感。お風呂上がりには、手足を伸ばしてゴロゴロ寝転がれる畳の休憩処へ。窓から吹き抜ける心地よい自然の風を感じながらまどろむ時間は、何にも代えがたい贅沢なお籠もり時間となります。",
+                hidden: "のどかな里山の風景に溶け込む、知る人ぞ知る静寂な隠れ家温泉です。観光地の喧騒から離れて、鳥のさえずりや風の音を聴きながら入る源泉掛け流しの湯はまさに極上。誰にも邪魔されず、自分のペースでゆっくりと心身を癒やしたい方にぴったりな、秘湯のような温かさがあります。"
             },
             4: { // 天然温泉 湯〜ねる
-                sauna: "適度な熱気と逆境的セッティングのサウナ室には、オートロウリュが完備されており抜群の発汗を促します。しっかりと温まった後は、キンキンに冷えた水風呂を堪能し、露天の外気浴エリアで夜空を見上げながら、心地よいリフレッシュと深いととのいを静かに体験できます。",
-                scenery: "都会の真ん中にありながらも、天井がすっきりと開けた開放感抜群の露天風呂。昼間は広々とした青空、夜は満天の星空や都会の微かな夜景をのんびり湯船から見上げることができ、あわただしい日常から離れて心がすっと軽くなる穏やかな非日常の贅沢に浸れます。",
-                meal: "ハズレなしの豊富な定番居酒屋メニューや和食が揃っており、お風呂上がりの一杯にぴったりな美味しいおつまみも充実しています。親しみやすく落ち着くフードコート形式のお食事処で、お腹いっぱい大満足の美味しいご飯を心ゆくまで和やかに堪能いただけます。",
-                relax: "20,000冊以上の圧倒的な漫画の蔵書を誇るコミックエリアが最大の魅力。ビーズクッションが敷き詰められた心地よいゴロゴロスペースやお籠もり個室が完備されており、お気に入りの一冊を片手に時を忘れてダラダラと最高のまったりお籠もりを体験できます。",
-                hidden: "新習志野駅から目の前という最高の立地ながら、館内は都会の喧騒を完全に忘れさせてくれる静寂な隠れオアシス。快適にレイアウトされた各休憩処で、誰にも邪魔されず静かに自分一人の特別な時間をのんびりと過ごせる極上の穴場スポットにございます。"
+                sauna: "適度な熱気が心地よく循環するサウナ室には、定期的なオートロウリュが完備され上質な発汗を楽しめます。すっきりと温まった後は冷水風呂で引き締め、星空を仰ぐ露天の外気浴エリアへ。心地よい夜風を浴びながらリラックスすれば、日常の疲れがじんわりとほどけていく感覚を味わえます。",
+                scenery: "都会の真ん中にありながらも、天井が大きく開けた開放感抜群の露天風呂が魅力です。昼間はどこまでも広がる青空、夜は静かな夜空を湯船に浸かりながらのんびりと見上げることができ、慌ただしい日常を忘れさせてくれます。視界に広がる開放的な空間が、心をごく自然に軽くしてくれます。",
+                meal: "定番の居酒屋メニューから本格的な和食まで、ハズレのない美味しいお食事がフードコート形式で気軽に楽しめます。湯上がりの乾いた身体に嬉しい冷たい一杯や、ボリューム満点の定食が勢揃い。親しみやすく落ち着いた空間で、お腹も心も大満足の美味しいひとときを過ごせます。",
+                relax: "２万冊以上の圧倒的な漫画の蔵書を誇るエリアが最大の魅力。ビーズクッションが心地よいゴロゴロスペースや、お籠もり感のある個室風ブースが完備されており、お気に入りの作品を片手に時間を忘れてまったり過ごせます。これ以上ないほど贅沢な、だらだら寛ぐお籠もりが叶います。",
+                hidden: "駅からすぐの好立地でありながら、館内に入れば駅前の喧騒を完全に忘れさせてくれる隠れたオアシスです。快適にレイアウトされたお休み処の数々は居心地が良く、静かに自分だけの時間を過ごすのに最適。日常の合間にふらりと立ち極上な休息をとるのに最適な穴場です。"
             },
             5: { // のだ温泉ほのか
-                sauna: "高温で熱気がしっかり充満する本格タワーサウナが自慢。芯からじっくりと身体を温めて爽快な汗を流した後は、野田の豊かな自然に囲まれた静寂な露天エリアでの外気浴へ。木々の揺れる爽やかな風を全身に浴びて深く呼吸すれば、日常の疲れが一気に吹き飛ぶ格別のととのいへ。",
-                scenery: "美しく手入れされた本格的な日本庭園風の露天エリアは風情たっぷり。季節ごとに表情を変える美しい木々や花々を眺めながら温泉に身体をゆだねれば、まるで遠く高雅な和の温泉地に来たかのような上品で静寂な逆景のひとときを心ゆくまで堪能することができます。",
-                meal: "一流の和食職人が丁寧に出汁を取ったハズレのない本格和食御膳が自慢。旬の食材を上品に仕立てた絶品お刺身や天ぷら、湯上がりに身体に染みる和の甘味など、お腹も心も和やかに満たしてくれるおもてなしの美味が広々とした畳のお食事処でごゆっくり楽しめます。",
-                relax: "スマホを持ち込めないからこそ、完全にデジタルから遮断された真のデジタルデトックスが叶う究極の岩盤浴。追加料金なしで利用できる多様なサウナや岩盤浴、誠にゴロゴロ寝転がれるお座敷休憩処で、文字通り心も身体も空っぽにして至福のまったりお籠もりに没頭できます。",
-                hidden: "野田の豊かな自然と落ち着いた和の静寂に包まれた,知る人ぞ知る大人の隠れ家温泉。日々の慌ただしさから完全に隔離された心地よい和風空間で、喧騒を気にせず、自分のためだけの穏やかな時の流れを極上の湯船と共に贅沢に独り占めすることができます。"
+                sauna: "木の薫りが心地よく充満する本格タワーサウナが自慢。芯からじっくりと温まり爽快な汗を流した後は、野田の豊かな自然に囲まれた静寂な露天エリアでの外気浴がおすすめです。木々を揺らす爽やかな風を全身に浴びて深呼吸すれば、格別の爽快感とともに心身がすっきりと整います。",
+                scenery: "美しく手入れされた本格的な日本庭園風の露天エリアは風情たっぷり。季節ごとに表情を変える美しい木々や情緒ある灯籠を眺めながらお湯に浸かれば、まるで遠くの老舗温泉旅館を訪れたかのような上品な旅情を味わえます。和の情緒あふれる美しい逆景が、心を穏やかに癒やしてくれます。",
+                meal: "和食の職人が丁寧に出汁を取った、上品な和食御膳や定食が絶品です。旬の素材を活かしたお刺身やサクサクの天ぷら、湯上がりに嬉しい本格的な和の甘味まで揃い、おもてなしの心が伝わります。広々とした畳敷きのお食事処でゆっくり味わえば、お腹も心も和やかに満たされます。",
+                relax: "追加料金なしで利用できる多彩な岩盤浴や、静かに寝転がれるお座敷休憩処が非常に充実しています。日常の喧騒やデジタルから離れて、心地よい温もりに包まれながら手足を伸ばしてゴロゴロ過ごす時間は至福そのもの。身体の芯からじっくりと温まりながら、極上の休息に没頭できます。",
+                hidden: "野田の豊かな自然と落ち着いた和の静寂に包まれた、知る人ぞ知る大人の隠れ家。日々の忙しさから隔離された上品な館内は、喧騒を気にせず穏やかな時の流れを贅沢に独り占めできます。自分だけの時間を大切に、のんびりと源泉を堪能したい方にぴったりな、とっておきの名湯です。"
             }
         };
 
@@ -1393,7 +1399,7 @@
             "ご飯が美味しい施設": "外れないご飯がある"
         };
 
-        // 特徴カテゴリマッピング（表記を完全に一致させる）
+        // 特徴カテゴリマッピング
         const FEATURE_CATEGORIES = {
             "サウナで整いたい": "sauna",
             "岩盤浴でまったり過ごしたい": "relax",
@@ -1412,7 +1418,7 @@
             "hidden": "穴場"
         };
 
-        // 各カテゴリの初期スコアにおける最大値
+        // 各カテゴリの初期最大値
         const CATEGORY_MAX_SCORES = {
             sauna: Math.max(...ONSEN_DB.map(o => o.scores.sauna)),
             scenery: Math.max(...ONSEN_DB.map(o => o.scores.scenery)),
@@ -1425,7 +1431,6 @@
         let currentStep = 1;
         const totalSteps = 5;
 
-        // ユーザー回答の一時保存
         let answers = {
             q1_weather: "",  
             q2_transport: "", 
@@ -1434,10 +1439,9 @@
             final_important: "" 
         };
 
-        // レコメンド結果
         let recommendedFacilities = []; 
         let currentCardIndex = 0; 
-        let currentMaxSingleScore = 1; // 【新規】最重視したカテゴリ単体における、補正適用後の最高基準点
+        let currentMaxCalculatedScore = 1; // 総合最高点を保持する変数に改名
 
         // --- 4. 質問データの定義 ---
         const quizSteps = {
@@ -1737,9 +1741,9 @@
             }
         }
 
-        // --- 8. 【最重要】すべての回答要素をレコメンドに活用する多層的ウェイト付けロジック ---
+        // --- 8. 【最重要】すべての回答要素を総合スコアへ集約する多層的ウェイト付け ＆ 分母・分子の比率設計 ---
         function calculateRecommendation() {
-            // (1) ウェイト管理オブジェクトの初期化（初期値はすべて 1.0）
+            // (1) ウェイト管理オブジェクトの初期化
             let weights = {
                 sauna: 1.0,
                 scenery: 1.0,
@@ -1748,7 +1752,7 @@
                 hidden: 1.0
             };
 
-            // (2) 1問目〜4問目のユーザー回答に応じたウェイトの底上げ（ウェイト 1.2）
+            // (2) 1問目〜4問目の回答に応じた細やかなウェイト底上げ（ウェイト 1.2）
             
             // Q1. 天気
             if (answers.q1_weather === "晴れ") {
@@ -1760,34 +1764,29 @@
 
             // Q2. 交通手段
             if (answers.q2_transport === "車") {
-                weights.hidden = 1.2; // 車で行きやすい郊外・隠れ家施設を底上げ
+                weights.hidden = 1.2; 
             } else if (answers.q2_transport === "電車") {
-                weights.relax = 1.2;  // 電車でアクセスしやすい駅近お籠もり
+                weights.relax = 1.2;  
             }
 
             // Q3. 気分（複数選択）
             answers.q3_moods.forEach(mood => {
                 const cat = FEATURE_CATEGORIES[mood];
-                if (cat) {
-                    weights[cat] = 1.2;
-                }
+                if (cat) weights[cat] = 1.2;
             });
 
             // Q4. 場所（複数選択）
             answers.q4_styles.forEach(style => {
                 const cat = FEATURE_CATEGORIES[style];
-                if (cat) {
-                    weights[cat] = 1.2;
-                }
+                if (cat) weights[cat] = 1.2;
             });
 
             // (3) 5問目（最重要項目）の上書き補正（ウェイト 5.0）
             const chosenTag = answers.final_important;
             const targetCategory = FEATURE_CATEGORIES[chosenTag] || "relax";
-            
             weights[targetCategory] = 5.0;
 
-            // (4) 雨天時のサウナ・お籠もり追加1.2倍ブースト（ウェイトへの乗算）
+            // (4) 雨天時のサウナ・お籠もり追加1.2倍乗算ブースト
             const isRainBoost = (answers.q1_weather === "雨" && (targetCategory === "relax" || targetCategory === "sauna"));
             if (isRainBoost) {
                 if (targetCategory === "sauna") {
@@ -1797,13 +1796,9 @@
                 }
             }
 
-            // 【適合率分母の新規定義】: 最重視したカテゴリ単体における「補正適用後の最高基準点」を算出
-            let baseMaxScore = CATEGORY_MAX_SCORES[targetCategory] || 1000;
-            currentMaxSingleScore = isRainBoost ? Math.round(baseMaxScore * 1.2) : baseMaxScore;
-
             // (5) 各施設の総合合計スコア算出 ＆ 絶景除外フィルタリング
             let calcList = ONSEN_DB.map(onsen => {
-                // 各カテゴリスコアに、多層ウェイトを掛けて合計する（ランキング決定用総合スコア）
+                // すべての回答（1〜5問目、および雨ブースト）を反映した「総合スコア」
                 let calculatedScore = Math.round(
                     (onsen.scores.sauna * weights.sauna) +
                     (onsen.scores.scenery * weights.scenery) +
@@ -1812,16 +1807,9 @@
                     (onsen.scores.hidden * weights.hidden)
                 );
 
-                // 【適合率分子の新規定義】: 最重視されたカテゴリの補正適用後単体スコアを保持
-                let singleCategoryScore = onsen.scores[targetCategory] || 0;
-                if (isRainBoost) {
-                    singleCategoryScore = Math.round(singleCategoryScore * 1.2);
-                }
-
                 return {
                     ...onsen,
-                    finalCalcScore: calculatedScore, // ランキング用
-                    singleCategoryScore: singleCategoryScore, // 適合率計算用
+                    finalCalcScore: calculatedScore, 
                     matchedCategory: targetCategory
                 };
             });
@@ -1834,6 +1822,9 @@
             // 総合合計スコアの降順ソートでランキング決定
             calcList.sort((a, b) => b.finalCalcScore - a.finalCalcScore);
             recommendedFacilities = calcList.slice(0, 3);
+
+            // 【分子・分母のアップデート】: レコメンドに並んだ施設群（上位最大3施設）の中での最高総合スコアを分母とする
+            currentMaxCalculatedScore = recommendedFacilities[0] ? recommendedFacilities[0].finalCalcScore : 1000;
 
             currentCardIndex = 0;
             renderStackCards();
@@ -1859,8 +1850,8 @@
 
                 const carBadgeStyle = (answers.q2_transport === "車") ? "display: flex;" : "display: none;";
 
-                // 【適合率の修正】: 最重視カテゴリの点数割合（補正後単体 / 補正後最高点）で計算
-                const matchRate = Math.min(100, Math.round((facility.singleCategoryScore / currentMaxSingleScore) * 100));
+                // 【適合率の修正】: レコメンド施設の中の総合最高点を分母、自身の総合合計スコアを分子として割合計算
+                const matchRate = Math.min(100, Math.round((facility.finalCalcScore / currentMaxCalculatedScore) * 100));
 
                 card.innerHTML = `
                     <div class="card-image-wrapper">
@@ -1885,7 +1876,7 @@
                         </div>
                         <div class="indicator-container">
                             <div class="indicator-label">
-                                <span>こだわり適合率（${categoryJaName}最重視）</span>
+                                <span>こだわり適合率（全体の好み総合）</span>
                                 <span>適合率 ${matchRate}%</span>
                             </div>
                             <div class="indicator-bar-bg">
@@ -1915,35 +1906,25 @@
 
                 card.className = "stack-card"; 
 
-                if (idx === currentCardIndex) {
-                    card.classList.add("rank-1");
-                } else if (idx === currentCardIndex + 1) {
-                    card.classList.add("rank-2");
-                } else if (idx === currentCardIndex + 2) {
-                    card.classList.add("rank-3");
-                } else {
-                    card.classList.add("hidden");
-                }
+                if (idx === currentCardIndex) card.classList.add("rank-1");
+                else if (idx === currentCardIndex + 1) card.classList.add("rank-2");
+                else if (idx === currentCardIndex + 2) card.classList.add("rank-3");
+                else card.classList.add("hidden");
             }
 
             const dots = dotsContainer.querySelectorAll(".dot");
             dots.forEach((dot, idx) => {
-                if (idx === currentCardIndex) {
-                    dot.classList.add("active");
-                } else {
-                    dot.classList.remove("active");
-                }
+                if (idx === currentCardIndex) dot.classList.add("active");
+                else dot.classList.remove("active");
                 
-                if (idx >= recommendedFacilities.length) {
-                    dot.style.display = "none";
-                } else {
-                    dot.style.display = "block";
-                }
+                if (idx >= recommendedFacilities.length) dot.style.display = "none";
+                else dot.style.display = "block";
             });
 
             updateResultDetails(currentCardIndex);
         }
 
+        // --- 10. 順位に応じた動的解説文・文字数カウンター処理 ＆ UIテーマ更新 ---
         function updateResultDetails(index) {
             const facility = recommendedFacilities[index];
             if (!facility) return;
@@ -1958,97 +1939,65 @@
             const chosenTagName = DISPLAY_IMPORTANT_NAMES[chosenTag] || chosenTag;
             
             const explanationBody = ONSEN_EXPLANATIONS[facility.id]?.[targetCategory] || "極上の和モダン空間と温かい湯船が、心と身体を優しく包み込みます。ごゆっくり至福のひとときをお過ごしください。";
-            const fullExplanation = `「【${chosenTagName}】を選んだあなたにぴったりの日帰り温泉は【${facility.name}】です！<br><br>${explanationBody}<br><br>この温泉は、きっとあなたに最高の癒しを与えてくれるでしょう！」`;
             
-            document.getElementById("result-explanation").innerHTML = fullExplanation;
+            // 順位（1位、2位、3位）に応じた冒頭の指定形式の出し分け
+            let introText = "";
+            if (index === 0) {
+                introText = `【${chosenTagName}】を選んだあなたに一番におすすめしたい日帰り温泉は【${facility.name}】です！`;
+            } else {
+                const numKanji = index === 1 ? "二" : "三";
+                introText = `【${chosenTagName}】なあなたに${numKanji}番目におすすめしたい日帰り温泉は【${facility.name}】です！`;
+            }
+            
+            const closingText = "この温泉は、きっとあなたに最高の癒しを与えてくれるでしょう！";
+            
+            // 画面表示用のHTML組み立て
+            const fullExplanationHTML = `${introText}<br><br>${explanationBody}<br><br>${closingText}`;
+            document.getElementById("result-explanation").innerHTML = fullExplanationHTML;
+
+            // 純粋な表示テキストの文字数をカウント（<br>タグを除去した文字数）
+            const pureTextStr = `${introText}${explanationBody}${closingText}`;
+            document.getElementById("explanation-count").innerText = `文字数: ${pureTextStr.length}文字`;
 
             // 3. 雨の日ボーナスバッジの表示制御
             const isRainyBonusActive = (answers.q1_weather === "雨" && (targetCategory === "relax" || targetCategory === "sauna"));
             const bonusBadge = document.getElementById("score-bonus-badge");
-            if (isRainyBonusActive) {
-                bonusBadge.style.display = "inline-flex";
-            } else {
-                bonusBadge.style.display = "none";
-            }
+            if (isRainyBonusActive) bonusBadge.style.display = "inline-flex";
+            else bonusBadge.style.display = "none";
 
             // 4. 各種ウェイト倍率のリアルタイム取得 ＆ 補正適用
-            let weights = {
-                sauna: 1.0,
-                scenery: 1.0,
-                meal: 1.0,
-                relax: 1.0,
-                hidden: 1.0
-            };
+            let weights = { sauna: 1.0, scenery: 1.0, meal: 1.0, relax: 1.0, hidden: 1.0 };
+            if (answers.q1_weather === "晴れ") weights.scenery = 1.2;
+            else if (answers.q1_weather === "雨") { weights.relax = 1.2; weights.sauna = 1.2; }
+            if (answers.q2_transport === "車") weights.hidden = 1.2;
+            else if (answers.q2_transport === "電車") weights.relax = 1.2;
 
-            // Q1. 天気ウェイト
-            if (answers.q1_weather === "晴れ") {
-                weights.scenery = 1.2;
-            } else if (answers.q1_weather === "雨") {
-                weights.relax = 1.2;
-                weights.sauna = 1.2;
-            }
-
-            // Q2. 交通手段ウェイト
-            if (answers.q2_transport === "車") {
-                weights.hidden = 1.2;
-            } else if (answers.q2_transport === "電車") {
-                weights.relax = 1.2;
-            }
-
-            // Q3. 気分タグによるウェイト
-            answers.q3_moods.forEach(mood => {
-                const cat = FEATURE_CATEGORIES[mood];
-                if (cat) weights[cat] = 1.2;
-            });
-
-            // Q4. 場所タグによるウェイト
-            answers.q4_styles.forEach(style => {
-                const cat = FEATURE_CATEGORIES[style];
-                if (cat) weights[cat] = 1.2;
-            });
-
-            // Q5. 最重視項目の5倍上書き
+            answers.q3_moods.forEach(mood => { const cat = FEATURE_CATEGORIES[mood]; if (cat) weights[cat] = 1.2; });
+            answers.q4_styles.forEach(style => { const cat = FEATURE_CATEGORIES[style]; if (cat) weights[cat] = 1.2; });
             weights[targetCategory] = 5.0;
 
-            // 雨の日追加1.2倍掛け算（サウナ・お籠もりに適用）
             if (answers.q1_weather === "雨") {
-                if (targetCategory === "sauna") {
-                    weights.sauna = weights.sauna * 1.2; // 6.0
-                } else if (targetCategory === "relax") {
-                    weights.relax = weights.relax * 1.2; // 6.0
-                }
+                if (targetCategory === "sauna") weights.sauna *= 1.2;
+                else if (targetCategory === "relax") weights.relax *= 1.2;
             }
 
-            // 倍率の視覚的バッジ更新関数
             function updateBadge(id, weight) {
                 const el = document.getElementById(id);
                 if (!el) return;
-                
-                el.className = "radar-badge"; // クラスリセット
-                
-                if (weight === 6.0) {
-                    el.classList.add("badge-extreme");
-                    el.innerHTML = `<i class="fa-solid fa-fire"></i> x6.0`;
-                } else if (weight === 5.0) {
-                    el.classList.add("badge-important");
-                    el.innerHTML = `<i class="fa-solid fa-star"></i> x5.0`;
-                } else if (weight === 1.2) {
-                    el.classList.add("badge-boost");
-                    el.innerHTML = `x1.2`;
-                } else {
-                    el.classList.add("badge-none");
-                    el.innerHTML = "";
-                }
+                el.className = "radar-badge"; 
+                if (weight === 6.0) { el.classList.add("badge-extreme"); el.innerHTML = `<i class="fa-solid fa-fire"></i> x6.0`; }
+                else if (weight === 5.0) { el.classList.add("badge-important"); el.innerHTML = `<i class="fa-solid fa-star"></i> x5.0`; }
+                else if (weight === 1.2) { el.classList.add("badge-boost"); el.innerHTML = `x1.2`; }
+                else el.classList.add("badge-none");
             }
 
-            // 各バッジの適用
             updateBadge("radar-badge-sauna", weights.sauna);
             updateBadge("radar-badge-scenery", weights.scenery);
             updateBadge("radar-badge-meal", weights.meal);
             updateBadge("radar-badge-relax", weights.relax);
             updateBadge("radar-badge-hidden", weights.hidden);
 
-            // 5. 個別特徴度スコア（ベーススコア ＆ 単品雨の日補正）のチャート表示
+            // 5. 個別特徴度スコアの表示
             let saunaScore = facility.scores.sauna;
             let sceneryScore = facility.scores.scenery;
             let mealScore = facility.scores.meal;
@@ -2079,23 +2028,18 @@
 
             // 6. 住所・駐車場の描画
             resultAddress.innerText = facility.address;
-
             if (answers.q2_transport === "車") {
                 resultParking.innerHTML = `<span style="background-color: var(--color-accent-light); padding: 4px 8px; border-radius: 8px;"><i class="fa-solid fa-parking"></i> ${facility.parking}</span> <br><small style="color:var(--color-text-light); font-weight:normal; margin-top:4px; display:block;">お車移動にぴったりな広々駐車場があります！</small>`;
             } else {
                 resultParking.innerHTML = `<i class="fa-solid fa-parking"></i> ${facility.parking}`;
             }
 
-            // 7. 背景テーマ色（グラデーション）の動的切替
+            // 7. 背景テーマ色の動的切替
             const screenElement = document.getElementById("screen-result");
             screenElement.className = "screen active"; 
-            if (index === 0) {
-                screenElement.classList.add("theme-forest");
-            } else if (index === 1) {
-                screenElement.classList.add("theme-steam");
-            } else {
-                screenElement.classList.add("theme-bath");
-            }
+            if (index === 0) screenElement.classList.add("theme-forest");
+            else if (index === 1) screenElement.classList.add("theme-steam");
+            else screenElement.classList.add("theme-bath");
 
             // 8. アクションボタンのリンク書き換え
             actionWeb.href = facility.url;
